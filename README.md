@@ -31,7 +31,7 @@ ps.url前缀由application.yml里server.servlet.context定义
 ##定义VO对象(ViewObject)  
 1. 用于返回给前端的对象
 2. 如果特殊原因后端类名无法使返回前端的名称，使用@JsonProperty注解,进行转义  
-##单元测试  
+##单元测试
 1. 必须在类前面加入注解
     @RunWith(SpringRunner.class)
     @SpringBootTest

@@ -43,6 +43,7 @@ public class Designcode {
     private Integer online;
     private Integer aggregate;
     private String argsdoc;
+    private String ddfname;
     private Timestamp crtime;
 
     public Designcode(){
