@@ -58,10 +58,10 @@ public class DesigncodeDAOTest {
     }
 
     @Test
-    public void findAllByCodeTest() throws Exception{
+    public void findAllTest() throws Exception{
         Sort sort = new Sort(Sort.Direction.ASC, "code");
         Pageable pageable = PageRequest.of(0, 2, sort);
-        Page<Designcode> page = designcodeDAO.findAllBy(pageable);
+        Page<Designcode> page = designcodeDAO.findAll(pageable);
         Assert.assertNotEquals(0, page.getTotalElements());
     }
 }
