@@ -7,7 +7,7 @@ import lombok.Getter;
  */
 @Getter
 public enum ResultEnum {
-    DESIGNCODE_NOT_EXIST(10, "设计代码不存在"),
+    DESIGNCODE_EXIST(10, "设计代码已存在"),
     ;
 
     private Integer code;
