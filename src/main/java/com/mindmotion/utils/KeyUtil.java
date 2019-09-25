@@ -10,7 +10,7 @@ public class KeyUtil {
     生成主键
     格式时间+随机数
      */
-    public static String genUniqueKey(){
+    public static synchronized String genUniqueKey(){
         Random random = new Random();
 
         System.currentTimeMillis();
