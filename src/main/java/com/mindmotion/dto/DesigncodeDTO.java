@@ -1,10 +1,13 @@
 package com.mindmotion.dto;
 
+import lombok.Data;
+
 import java.sql.Timestamp;
 
 /**
  * Created by mecwa on 2019/9/25.
  */
+@Data
 public class DesigncodeDTO {
     private Integer id;
     private String code;
