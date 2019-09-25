@@ -6,6 +6,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,5 +55,13 @@ public class DesigncodeDAOTest {
         Designcode designcode = designcodeDAO.findByCode("MZ310");
         System.out.println(designcode);
         Assert.assertNotNull(designcode);
+    }
+
+    @Test
+    public void findAllByCodeTest() throws Exception{
+        Sort sort = new Sort(Sort.Direction.ASC, "code");
+        Pageable pageable = PageRequest.of(0, 2, sort);
+        Page<Designcode> page = designcodeDAO.findAllBy(pageable);
+        Assert.assertNotEquals(0, page.getTotalElements());
     }
 }

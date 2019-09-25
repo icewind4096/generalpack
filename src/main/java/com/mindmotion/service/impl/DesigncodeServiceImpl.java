@@ -27,8 +27,8 @@ public class DesigncodeServiceImpl implements DesigncodeService {
     }
 
     @Override
-    public Designcode findByCode(String designCode) {
-        return designcodeDAO.findByCode(designCode);
+    public Designcode findByCode(String code) {
+        return designcodeDAO.findByCode(code);
     }
 
     @Override
