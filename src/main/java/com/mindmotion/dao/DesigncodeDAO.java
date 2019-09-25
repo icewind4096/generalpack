@@ -11,5 +11,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface DesigncodeDAO extends JpaRepository<Designcode, Integer>{
     Designcode findByCode(String code);
 
-    Page<Designcode> findAllBy(Pageable pageable);
+    Page<Designcode> findAll(Pageable pageable);
 }
