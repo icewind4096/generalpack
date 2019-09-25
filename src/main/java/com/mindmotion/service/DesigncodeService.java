@@ -1,15 +1,15 @@
 package com.mindmotion.service;
 
 import com.mindmotion.domain.Designcode;
-
-import java.util.List;
+import com.mindmotion.dto.DesigncodeDTO;
+import org.springframework.data.domain.Page;
 
 /**
  * Created by mecwa on 2019/9/22.
  */
 public interface DesigncodeService {
     // 新建Designcode
-    Designcode create(Designcode designcode);
+    DesigncodeDTO create(DesigncodeDTO designcode);
 
     // 修改Designcode
     Designcode update(Designcode designcode);
@@ -17,5 +17,5 @@ public interface DesigncodeService {
     //// 查询单条记录WithCode
     Designcode findByCode(String code);
 
-    List<Designcode> findAll();
+    Page<Designcode> findAll();
 }
