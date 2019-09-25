@@ -12,10 +12,10 @@ public interface DesigncodeService {
     DesigncodeDTO create(DesigncodeDTO designcode);
 
     // 修改Designcode
-    Designcode update(Designcode designcode);
+    DesigncodeDTO update(DesigncodeDTO designcode);
 
     //// 查询单条记录WithCode
-    Designcode findByCode(String code);
+    DesigncodeDTO findByCode(String code);
 
-    Page<Designcode> findAll();
+    Page<DesigncodeDTO> findAll();
 }
