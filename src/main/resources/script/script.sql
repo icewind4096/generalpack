@@ -46,7 +46,7 @@ Values
 
 CREATE TABLE `ddfmemory` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
-	`ddfname` VARCHAR(32) NOT NULL,
+	`name` VARCHAR(32) NOT NULL,
 	`keytype` VARCHAR(16) NOT NULL,
 	`name` VARCHAR(16) NOT NULL,
 	`adrspace` VARCHAR(16) NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE `ddfmemory` (
 	AUTO_INCREMENT=1
 ;
 
-INSERT INTO ddfmemory (`ddfname`, `keytype`, `name`, `adrspace`, `startadr`, `endadr`, `acctype`, `width`)
+INSERT INTO ddfmemory (`name`, `keytype`, `name`, `adrspace`, `startadr`, `endadr`, `acctype`, `width`)
 Values
 	('Cortex-M0', 'Memory', 'Periph', 				'Memory', 1073741824, 1207965695,  	'W', ''),
 	('Cortex-M0', 'Memory', 'SystemSFR',			'Memory', 3758096384, 3759144959,  	'W', ''),
@@ -80,7 +80,7 @@ Values
 
 CREATE TABLE `flashload` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
-	`designcode` VARCHAR(16) NOT NULL,
+	`name` VARCHAR(32) NOT NULL,
 	`descript` VARCHAR(32) NOT NULL,
 	`iarfilename` VARCHAR(256) NOT NULL,
 	`keilfilename` VARCHAR(256) NOT NULL,
@@ -112,7 +112,8 @@ CREATE TABLE `partfamily` (
 CREATE TABLE `Subpartfamily` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`familyname` VARCHAR(64) NOT NULL,
-	`subFamilyname` VARCHAR(64) NOT NULL,
+	`subfamilyname` VARCHAR(64) NOT NULL,
+	`flashloadname` VARCHAR(32) NOT NULL,
 	`tag` VARCHAR(256) NOT NULL,
 	`displayname` VARCHAR(256) NOT NULL,
 	`freq` INT(11) NOT NULL,
