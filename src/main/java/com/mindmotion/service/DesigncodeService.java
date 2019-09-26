@@ -1,6 +1,5 @@
 package com.mindmotion.service;
 
-import com.mindmotion.domain.Designcode;
 import com.mindmotion.dto.DesigncodeDTO;
 import org.springframework.data.domain.Page;
 
@@ -14,8 +13,9 @@ public interface DesigncodeService {
     // 修改Designcode
     DesigncodeDTO update(DesigncodeDTO designcode);
 
-    //// 查询单条记录WithCode
+    // 查询单条记录WithCode
     DesigncodeDTO findByCode(String code);
 
+    // DesignCode分页列表
     Page<DesigncodeDTO> findAll();
 }

@@ -25,6 +25,7 @@ CREATE TABLE `designcode` (
 	`aggregate` INT(11) NOT NULL,
 	`argsdoc` VARCHAR(64) NOT NULL,
 	`ddfname` VARCHAR(32) NOT NULL,
+	`dmacname` VARCHAR(32) NOT NULL,
 	`crtime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `id_UNIQUE` (`id`),
@@ -36,14 +37,33 @@ CREATE TABLE `designcode` (
 ;
 
 INSERT INTO designcode (`code`, `corename`, `corever`, `minfreq`, `fpu`, `mpu`, `simd`, `jtag`, `swd`, `swotraced0`, `endian`, `thumbsupport`, `armsupport`, `flashbase`,
-												`rambase`, `intvecbase`, `block`, `page`, `trusterange`, `useSfrfilter`, `online`, `aggregate`, `argsdoc`, `ddfname`)
+												`rambase`, `intvecbase`, `block`, `page`, `trusterange`, `useSfrfilter`, `online`, `aggregate`, `argsdoc`, `ddfname`, `dmacname`)
 Values
-	('MZ310', 'Cortex-M0', 'r0p0', 72000000, 0, 0, 0, 0, 0, 0, 0, 1, 0, 134217728, 536870912, 134217728, 1024, 2, 1, 1, 1, 1, '--skip_erase -Don\'t erase blocks that read empty.', 'Cortex-M0'),
-	('MZ309', 'Cortex-M0', 'r0p0', 72000000, 0, 0, 0, 0, 0, 0, 0, 1, 0, 134217728, 536870912, 134217728, 1024, 2, 1, 1, 1, 1, '--skip_erase -Don\'t erase blocks that read empty.', 'Cortex-M0'),
-	('MZ308', 'Cortex-M0', 'r0p0', 96000000, 0, 0, 0, 0, 0, 0, 0, 1, 0, 134217728, 536870912, 134217728, 1024, 2, 1, 1, 1, 1, '--skip_erase -Don\'t erase blocks that read empty.', 'Cortex-M0'),
-	('MZ306', 'Cortex-M0', 'r0p0', 72000000, 0, 0, 0, 0, 0, 0, 0, 1, 0, 134217728, 536870912, 134217728, 1024, 2, 1, 1, 1, 1, '--skip_erase -Don\'t erase blocks that read empty.', 'Cortex-M0'),
-	('MZ307', 'Cortex-M3', 'r2p1', 144000000,0, 0, 0, 0, 0, 0, 0, 1, 0, 134217728, 536870912, 134217728, 1024, 2, 1, 1, 1, 1, '--skip_erase -Don\'t erase blocks that read empty.', 'Cortex-M0'),
-	('MZ304', 'Cortex-M3', 'r2p1', 96000000, 0, 0, 0, 0, 0, 0, 0, 1, 0, 134217728, 536870912, 134217728, 1024, 2, 1, 1, 1, 1, '--skip_erase -Don\'t erase blocks that read empty.', 'Cortex-M0');
+	('MZ310', 'Cortex-M0', 'r0p0', 72000000, 0, 0, 0, 0, 0, 0, 0, 1, 0, 134217728, 536870912, 134217728, 1024, 2, 1, 1, 1, 1, '--skip_erase -Don\'t erase blocks that read empty.', 'Cortex-M0', 'Cortex-M0'),
+	('MZ309', 'Cortex-M0', 'r0p0', 72000000, 0, 0, 0, 0, 0, 0, 0, 1, 0, 134217728, 536870912, 134217728, 1024, 2, 1, 1, 1, 1, '--skip_erase -Don\'t erase blocks that read empty.', 'Cortex-M0', 'Cortex-M0'),
+	('MZ308', 'Cortex-M0', 'r0p0', 96000000, 0, 0, 0, 0, 0, 0, 0, 1, 0, 134217728, 536870912, 134217728, 1024, 2, 1, 1, 1, 1, '--skip_erase -Don\'t erase blocks that read empty.', 'Cortex-M0', 'Cortex-M0'),
+	('MZ306', 'Cortex-M0', 'r0p0', 72000000, 0, 0, 0, 0, 0, 0, 0, 1, 0, 134217728, 536870912, 134217728, 1024, 2, 1, 1, 1, 1, '--skip_erase -Don\'t erase blocks that read empty.', 'Cortex-M0', 'Cortex-M0'),
+	('MZ307', 'Cortex-M3', 'r2p1', 144000000,0, 0, 0, 0, 0, 0, 0, 1, 0, 134217728, 536870912, 134217728, 1024, 2, 1, 1, 1, 1, '--skip_erase -Don\'t erase blocks that read empty.', 'Cortex-M0', 'Cortex-M0'),
+	('MZ304', 'Cortex-M3', 'r2p1', 96000000, 0, 0, 0, 0, 0, 0, 0, 1, 0, 134217728, 536870912, 134217728, 1024, 2, 1, 1, 1, 1, '--skip_erase -Don\'t erase blocks that read empty.', 'Cortex-M0', 'Cortex-M0');
+
+DROP table if exists `dmac`;
+CREATE TABLE `dmac` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(32) NOT NULL,
+	`filePath` VARCHAR(256) NOT NULL,
+	`crtime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `id_UNIQUE` (`id`)
+)
+	COLLATE='utf8_general_ci'
+	ENGINE=InnoDB
+	AUTO_INCREMENT=1
+;
+
+INSERT INTO dmac (`name`, `filePath`)
+Values
+	('Cortex-M0', 'M0.DMAC'),
+	('Cortex-M3', 'M3.DMAC');
 
 DROP table if exists `ddfmemory`;
 CREATE TABLE `ddfmemory` (
@@ -113,11 +133,11 @@ CREATE TABLE `partfamily` (
 	AUTO_INCREMENT=1
 ;
 
-DROP table if exists `subpartfamily`;
-CREATE TABLE `subpartfamily` (
+DROP table if exists `part`;
+CREATE TABLE `part` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`familyname` VARCHAR(64) NOT NULL,
-	`subfamilyname` VARCHAR(64) NOT NULL,
+	`partname` VARCHAR(64) NOT NULL,
 	`flashloadname` VARCHAR(32) NOT NULL,
 	`tag` VARCHAR(256) NOT NULL,
 	`displayname` VARCHAR(256) NOT NULL,

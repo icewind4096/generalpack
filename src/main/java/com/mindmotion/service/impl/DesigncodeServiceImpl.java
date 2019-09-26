@@ -22,7 +22,7 @@ public class DesigncodeServiceImpl implements DesigncodeService {
     @Autowired
     private DesigncodeDAO designcodeDAO;
 
-    public DesigncodeDTO edit(DesigncodeDTO designcodeDTO) {
+    private DesigncodeDTO edit(DesigncodeDTO designcodeDTO) {
         Designcode designcode = new Designcode();
         BeanUtils.copyProperties(designcodeDTO, designcode);
         designcode = designcodeDAO.save(designcode);
@@ -58,9 +58,12 @@ public class DesigncodeServiceImpl implements DesigncodeService {
 
         DesigncodeDTO designcodeDTO = new DesigncodeDTO();
 
-        BeanUtils.copyProperties(designcode, designcodeDTO);
+        if (designcodeDTO != null){
+            BeanUtils.copyProperties(designcode, designcodeDTO);
+            return designcodeDTO;
+        }
 
-        return designcodeDTO;
+        return null;
     }
 
     @Override

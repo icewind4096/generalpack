@@ -32,5 +32,6 @@ public class DesigncodeVO {
     private Integer online;
     private Integer aggregate;
     private String argsdoc;
+    private String dmac;
     private Timestamp crtime;
 }

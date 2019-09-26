@@ -34,5 +34,6 @@ public class DesigncodeDTO {
     private Integer aggregate;
     private String argsdoc;
     private String ddfname;
+    private String dmac;
     private Timestamp crtime;
 }

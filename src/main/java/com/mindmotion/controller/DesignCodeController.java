@@ -1,6 +1,8 @@
 package com.mindmotion.controller;
 
 import com.mindmotion.domain.Designcode;
+import com.mindmotion.dto.DesigncodeDTO;
+import com.mindmotion.enums.ResultEnum;
 import com.mindmotion.service.DesigncodeService;
 import com.mindmotion.utils.ResultVOUtil;
 import com.mindmotion.vo.DesigncodeVO;
@@ -9,9 +11,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.xml.transform.Result;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +33,13 @@ public class DesignCodeController {
     @GetMapping("/list")
     public ResultVO List(){
         //1. 查询出全部的designcode
-        Page<Designcode> designcodeList = designcodeService.findAll();
+        Page<DesigncodeDTO> designcodeList = designcodeService.findAll();
 
         //2. 拼装数据
         List<DesigncodeVO> designcodeVOList = new ArrayList<>();
-        for (Designcode designcode: designcodeList){
+        for (DesigncodeDTO designcodeDTO: designcodeList){
             DesigncodeVO designcodeVO = new DesigncodeVO();
-            BeanUtils.copyProperties(designcode, designcodeVO);
+            BeanUtils.copyProperties(designcodeDTO, designcodeVO);
             designcodeVOList.add(designcodeVO);
         }
 

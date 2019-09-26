@@ -38,4 +38,20 @@ ps.url前缀由application.yml里server.servlet.context定义
 2. 注入需要的Service或者DAO，诸如此类    
     @Autowired
 3. 为了保证测试数据不污染数据库，使用@Transactional，让事务回滚  
-    
+##XML
+1. 产生XML文件  
+    a.)先创立Document对象 
+        Document document = new DocmentHelp.createDocument()    
+    b.)创建根节点  
+        Element root = document.addElement($text)
+    c.)创建子元素  
+        Element sub = root.addElement($text)
+    e.)元素名称
+        sub.addText($text)
+    d.)元素添加属性  
+        sub.addAttribute($attrib, $value)
+    e.)流输出  
+        OutputFormat outputFormat = OutputFormat.createPrettyPrint()
+        XMLWriter xmlWriter = new XMLWriter(new FileWriter(new File($filePath)), outputFormat)
+        xmlWriter.write(doc)
+        xmlWriter.close();
