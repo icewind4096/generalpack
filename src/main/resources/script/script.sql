@@ -1,3 +1,4 @@
+DROP table if exists `designcode`;
 CREATE TABLE `designcode` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`code` VARCHAR(16) NOT NULL,
@@ -44,11 +45,12 @@ Values
 	('MZ307', 'Cortex-M3', 'r2p1', 144000000,0, 0, 0, 0, 0, 0, 0, 1, 0, 134217728, 536870912, 134217728, 1024, 2, 1, 1, 1, 1, '--skip_erase -Don\'t erase blocks that read empty.', 'Cortex-M0'),
 	('MZ304', 'Cortex-M3', 'r2p1', 96000000, 0, 0, 0, 0, 0, 0, 0, 1, 0, 134217728, 536870912, 134217728, 1024, 2, 1, 1, 1, 1, '--skip_erase -Don\'t erase blocks that read empty.', 'Cortex-M0');
 
+DROP table if exists `ddfmemory`;
 CREATE TABLE `ddfmemory` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(32) NOT NULL,
 	`keytype` VARCHAR(16) NOT NULL,
-	`name` VARCHAR(16) NOT NULL,
+	`caption` VARCHAR(32) NOT NULL,
 	`adrspace` VARCHAR(16) NOT NULL,
 	`startadr` bigint(11) NOT NULL,
 	`endadr` bigint(11) NOT NULL,
@@ -63,7 +65,7 @@ CREATE TABLE `ddfmemory` (
 	AUTO_INCREMENT=1
 ;
 
-INSERT INTO ddfmemory (`name`, `keytype`, `name`, `adrspace`, `startadr`, `endadr`, `acctype`, `width`)
+INSERT INTO ddfmemory (`name`, `keytype`, `caption`, `adrspace`, `startadr`, `endadr`, `acctype`, `width`)
 Values
 	('Cortex-M0', 'Memory', 'Periph', 				'Memory', 1073741824, 1207965695,  	'W', ''),
 	('Cortex-M0', 'Memory', 'SystemSFR',			'Memory', 3758096384, 3759144959,  	'W', ''),
@@ -78,6 +80,7 @@ Values
 	('Cortex-M3', 'Memory', 'RemapMem'		, 	'Memory', 0,					65535, 	 			'W', ''),
 	('Cortex-M3', 'Memory', 'RAM-BitBand'	, 	'Memory', 570425344,	571080703, 		'W', '');
 
+DROP table if exists `flashload`;
 CREATE TABLE `flashload` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`name` VARCHAR(32) NOT NULL,
@@ -93,6 +96,7 @@ CREATE TABLE `flashload` (
 	AUTO_INCREMENT=1
 ;
 
+DROP table if exists `partfamily`;
 CREATE TABLE `partfamily` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`parentId` VARCHAR(16) NOT NULL DEFAULT -1,
@@ -109,7 +113,8 @@ CREATE TABLE `partfamily` (
 	AUTO_INCREMENT=1
 ;
 
-CREATE TABLE `Subpartfamily` (
+DROP table if exists `subpartfamily`;
+CREATE TABLE `subpartfamily` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`familyname` VARCHAR(64) NOT NULL,
 	`subfamilyname` VARCHAR(64) NOT NULL,
@@ -129,6 +134,7 @@ CREATE TABLE `Subpartfamily` (
 	AUTO_INCREMENT=1
 ;
 
+DROP table if exists `packlog`;
 CREATE TABLE `packlog` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
 	`familyName` VARCHAR(64) NOT NULL,
