@@ -76,19 +76,19 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         stringBuffer.append(String.format("%s=%s", "armsupport", StringUtils.Int2BoolString(designcode.getArmsupport())));
         stringBuffer.append(String.format("%s=%s", "fpu", getFPU(designcode.getFpu()));
         stringBuffer.append(String.format("%s=%s", "simd", StringUtils.Int2BoolString(designcode.getSimd())));
-        stringBuffer.append(String.format("%s=%s", "ProbeScriptFile", "");
-        stringBuffer.append(String.format("%s=%s", "DeviceMacros", getDMAC(company, designcode.getDmac());
-        stringBuffer.append(String.format("%s=%s", "JTAG", designcode.getPartname()));
-        stringBuffer.append(String.format("%s=%s", "SWD", designcode.getPartname()));
-        stringBuffer.append(String.format("%s=%s", "SWO_TraceD0", designcode.getPartname()));
+        stringBuffer.append(String.format("%s=%s", "ProbeScriptFile", getProbeScriptFileName(company, "MM32.ProbeScript")));
+        stringBuffer.append(String.format("%s=%s", "DeviceMacros", getDMACFileName(company, designcode.getDmac())));
+        stringBuffer.append(String.format("%s=%s", "JTAG", StringUtils.Int2BoolString(designcode.getJtag())));
+        stringBuffer.append(String.format("%s=%s", "SWD", StringUtils.Int2BoolString(designcode.getSwd())));
+        stringBuffer.append(String.format("%s=%s", "SWO_TraceD0", StringUtils.Int2BoolString(designcode.getSwotraced0())));
         stringBuffer.append("\n");
 
         stringBuffer.append("[CORE]");
-        stringBuffer.append(String.format("%s=%s", "name", designcode.getPartname()));
+        stringBuffer.append(String.format("%s=%s", "name", designcode.getCode()));
         stringBuffer.append("\n");
 
         stringBuffer.append("[DDF FILE]");
-        stringBuffer.append(String.format("%s=%s", "name", designcode.getPartname()));
+        stringBuffer.append(String.format("%s=%s", "name", getDDFFileName(designcode.getDdfname())));
         stringBuffer.append("\n");
 
         stringBuffer.append("[LINKER FILE]");
@@ -102,8 +102,16 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         return true;
     }
 
-    private String getDMAC(String company, String dmac) {
+    private Object getDDFFileName(String company, String ddfname) {
+        return String.format("%s\\%s", company, ddfname);
+    }
+
+    private String getDMACFileName(String company, String dmac) {
         return String.format("%s\\config\\debugger\\%s\\%s", SystemPathEnum.SYSTEM_PATH_TOOLKITDIR.getMessage(), company, dmac);
+    }
+
+    public Object getProbeScriptFileName(String company, String probeScript) {
+        return String.format("%s\\config\\debugger\\%s\\%s", SystemPathEnum.SYSTEM_PATH_TOOLKITDIR.getMessage(), company, probeScript);
     }
 
     private String getFPU(Integer fpu) {
