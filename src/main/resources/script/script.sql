@@ -87,18 +87,18 @@ CREATE TABLE `ddfmemory` (
 
 INSERT INTO ddfmemory (`name`, `keytype`, `caption`, `adrspace`, `startadr`, `endadr`, `acctype`, `width`)
 Values
-	('Cortex-M0', 'Memory', 'Periph', 				'Memory', 1073741824, 1207965695,  	'W', ''),
-	('Cortex-M0', 'Memory', 'SystemSFR',			'Memory', 3758096384, 3759144959,  	'W', ''),
-	('Cortex-M0', 'Memory', 'ROM', 						'Memory', 536869887,	536869887,  	'W', ''),
-	('Cortex-M0', 'Memory', 'RemapMem', 			'Memory', 0,   				32767,  			'W', ''),
-	('Cortex-M3', 'Memory', 'Periph'		, 		'Memory', 1073741824, 1073886207,  	'W', ''),
-	('Cortex-M3', 'Memory', 'Periph-BitBand',	'Memory', 1107296256, 1111916543,  	'W', ''),
-	('Cortex-M3', 'Memory', 'SystemSFR'		, 	'Memory', 3758096384,	3759144959,  	'W', ''),
-	('Cortex-M3', 'Memory', 'ROM', 						'Memory', 536862720, 	536868879, 		'W', ''),
-	('Cortex-M3', 'Memory', 'ExtDev'		, 		'Memory', 1610612736, 2684354559,  	'W', ''),
-	('Cortex-M3', 'Memory', 'Periph1'		,			'Memory', 2684354560, 2684358655,  	'W', ''),
-	('Cortex-M3', 'Memory', 'RemapMem'		, 	'Memory', 0,					65535, 	 			'W', ''),
-	('Cortex-M3', 'Memory', 'RAM-BitBand'	, 	'Memory', 570425344,	571080703, 		'W', '');
+	('Cortex-M0', 'Memory', 'Periph', 				'Memory', '$40000000', '$480017FF', 'W', ''),
+	('Cortex-M0', 'Memory', 'SystemSFR',			'Memory', '$E0000000', '$E00FFFFF', 'W', ''),
+	('Cortex-M0', 'Memory', 'ROM', 						'Memory', '$1FFFEC00', '$1FFFFBFF', 'W', ''),
+	('Cortex-M0', 'Memory', 'RemapMem', 			'Memory', '$00000000', '$00007FFF',	'W', ''),
+	('Cortex-M3', 'Memory', 'Periph'		, 		'Memory', '$40000000', '$400233FF', 'W', ''),
+	('Cortex-M3', 'Memory', 'Periph-BitBand',	'Memory', '$42000000', '$42467FFF', 'W', ''),
+	('Cortex-M3', 'Memory', 'SystemSFR'		, 	'Memory', '$E0000000', '$E00FFFFF', 'W', ''),
+	('Cortex-M3', 'Memory', 'ROM', 						'Memory', '$1FFFE000', '$1FFFF80F',	'W', ''),
+	('Cortex-M3', 'Memory', 'ExtDev'		, 		'Memory', '$60000000', '$9FFFFFFF', 'W', ''),
+	('Cortex-M3', 'Memory', 'Periph1'		,			'Memory', '$A0000000', '$A0000FFF', 'W', ''),
+	('Cortex-M3', 'Memory', 'RemapMem'		, 	'Memory', '$00000000', '$0001FFFF', 'W', ''),
+	('Cortex-M3', 'Memory', 'RAM-BitBand'	, 	'Memory', '$22000000', '$2209FFFF', 'W', '');
 
 DROP table if exists `flashload`;
 CREATE TABLE `flashload` (
