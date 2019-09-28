@@ -44,7 +44,7 @@ public class Designcode {
     private Integer aggregate;
     private String argsdoc;
     private String ddfname;
-    private String dmac;
+    private String dmacname;
     private Timestamp crtime;
 
     public Designcode(){
