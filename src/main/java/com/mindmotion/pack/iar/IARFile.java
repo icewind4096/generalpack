@@ -157,4 +157,9 @@ public class IARFile {
     public static String getI79FileName(String directory, String partName) {
         return getPartFileName(directory, partName, ".i79");
     }
+
+    public static boolean makeDebugDirectory(String directoryName) {
+        FileUtils.makeDirs(directoryName);
+        return true;
+    }
 }
