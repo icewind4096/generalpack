@@ -5,8 +5,8 @@ package com.mindmotion.service;
  */
 public interface GeneralPackService {
     // 产生IAR pack文件
-    Integer generalIARPack(String subFamilyName);
+    Integer generateIARPackByPartName(String partName);
 
     // 产生Keil pack文件
-    Integer generlKeilPack(String subFamilyName);
+    Integer generateKeilPackByPartName(String partName);
 }
