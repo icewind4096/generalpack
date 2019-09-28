@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 public enum IARSysPathEnum {
     SYSTEM_PATH_CURDIR(10, "$CUR_DIR$"),
-    SYSTEM_PATH_TOOLKITDIR(20, "$TOOLKIT_DIR");
+    SYSTEM_PATH_TOOLKITDIR(20, "$TOOLKIT_DIR$");
     ;
 
     private Integer code;
