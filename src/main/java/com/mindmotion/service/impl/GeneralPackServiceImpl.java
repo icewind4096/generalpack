@@ -2,8 +2,10 @@ package com.mindmotion.service.impl;
 
 import com.mindmotion.converter.Designcode2DesigncodeDTOConvert;
 import com.mindmotion.converter.Part2PartDTOConvert;
+import com.mindmotion.dao.DDFMemoryDAO;
 import com.mindmotion.dao.DesigncodeDAO;
 import com.mindmotion.dao.PartDAO;
+import com.mindmotion.domain.DDFMemory;
 import com.mindmotion.domain.Designcode;
 import com.mindmotion.domain.Part;
 import com.mindmotion.dto.DesigncodeDTO;
@@ -13,8 +15,11 @@ import com.mindmotion.exception.DesigncodeException;
 import com.mindmotion.pack.iar.IARFile;
 import com.mindmotion.service.GeneralPackService;
 import com.mindmotion.utils.FileUtils;
+import org.hibernate.engine.jdbc.internal.DDLFormatterImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by mecwa on 2019/9/26.
@@ -27,7 +32,11 @@ public class GeneralPackServiceImpl implements GeneralPackService {
     @Autowired
     DesigncodeDAO designcodeDAO;
 
+    @Autowired
+    DDFMemoryDAO ddfMemoryDAO;
+
     private final String COMPANYNAME = "mindmotion";
+    private final String ROOTDIRECTORY = "C:\\Users\\mecwa\\Desktop\\pack\\iar";
 
     // TODO: 2019/9/26 后期数据有redis中获得，启动时，先把数据调理以后放入redis, 此处先模拟一些数据
     private String getFamilyPath(String partName) {
@@ -43,8 +52,6 @@ public class GeneralPackServiceImpl implements GeneralPackService {
 
     @Override
     public Integer generateIARPackByPartName(String partName) {
-        String rootDirectory = "C:\\Users\\mecwa\\Desktop\\pack\\iar";
-
         Part part = partDAO.findByPartname(partName);
         if (part == null){
             throw new DesigncodeException(ResultEnum.SUBPARTFAMILY_NAME_NOT_EXITS);
@@ -57,13 +64,31 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         }
         DesigncodeDTO designcodeDTO = Designcode2DesigncodeDTOConvert.convert(designcode);
 
-        String directory = IARFile.getDeviceFilePath(rootDirectory, COMPANYNAME, getFamilyPath(partName));
-        if (IARFile.makeDeviceDirectory(directory) == true) {
-            IARFile.generateMenuFile(IARFile.getMenuFileName(directory, partName), partDTO);
-            IARFile.generateI79File(IARFile.getI79FileName(directory, partName), COMPANYNAME, partName, designcodeDTO);
-        }
+        List<DDFMemory> ddfMemoryList = ddfMemoryDAO.findAllByName(designcode.getDdfname());
+
+        generate4Devices(ROOTDIRECTORY, COMPANYNAME, partName, partDTO, designcodeDTO);
+
+        generate4Debug(ROOTDIRECTORY, COMPANYNAME, partName, designcode.getCorename(), ddfMemoryList);
 
         return 0;
+    }
+
+    private Boolean generate4Debug(String rootDirectory, String companyname, String partName, String coreName, List<DDFMemory> ddfMemoryList) {
+        String directory = IARFile.getDebugFilePath(rootDirectory, COMPANYNAME);
+        if (IARFile.makeDebugDirectory(directory) == true) {
+        }
+
+        return false;
+    }
+
+    private Boolean generate4Devices(String rootDirectory, String company, String partName, PartDTO partDTO, DesigncodeDTO designcodeDTO) {
+        String directory = IARFile.getDeviceFilePath(rootDirectory, company, getFamilyPath(partName));
+        if (IARFile.makeDeviceDirectory(directory) == true) {
+            IARFile.generateMenuFile(IARFile.getMenuFileName(directory, partName), partDTO);
+            IARFile.generateI79File(IARFile.getI79FileName(directory, partName), company, partName, designcodeDTO);
+            return true;
+        }
+        return false;
     }
 
     @Override
