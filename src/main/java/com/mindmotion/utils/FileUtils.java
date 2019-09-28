@@ -12,9 +12,4 @@ public class FileUtils {
             directory.mkdirs();
         }
     }
-
-    public static String getDirectoryFromFileName(String fileName){
-        File file = new File(fileName);
-        return file.getAbsolutePath();
-    }
 }
