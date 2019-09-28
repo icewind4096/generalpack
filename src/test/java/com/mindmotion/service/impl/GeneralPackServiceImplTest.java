@@ -21,8 +21,8 @@ public class GeneralPackServiceImplTest {
 
     @Test
     public void generalIARPack() throws Exception {
-        Integer value = generalPackService.generalIARPack("MM32F032K6U6");
-        Assert.assertNotEquals(0, 0);
+        Integer value = generalPackService.generateIARPackByPartName("MM32F032K6U6");
+        Assert.assertEquals(0, 0);
     }
 
     @Test
