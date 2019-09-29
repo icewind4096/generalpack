@@ -2,6 +2,8 @@ package com.mindmotion.dto;
 
 import lombok.Data;
 
+import java.sql.Timestamp;
+
 /**
  * Created by mecwa on 2019/9/28.
  */
@@ -17,5 +19,5 @@ public class PartDTO {
     private Integer flashsize;
     private Integer ramsize;
     private String ips;
-    private String crtime;
+    private Timestamp crtime;
 }
