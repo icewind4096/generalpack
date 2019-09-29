@@ -10,6 +10,11 @@ import lombok.Getter;
 public class GeneratePackException extends RuntimeException {
     private Integer code;
 
+    public GeneratePackException(Integer code, String message) {
+        super(message);
+        this.code = code;
+    }
+
     public GeneratePackException(ResultEnum resultEnum) {
         super(resultEnum.getMessage());
 
