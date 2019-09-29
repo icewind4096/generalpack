@@ -12,18 +12,21 @@ public class StringUtils {
         }
     }
 
-    public static String int2HexString(Integer value, Integer width, Boolean preEn, Boolean posEn, Boolean lowCase){
+    public static String int2HexString(Integer value, Integer width, Boolean preEn, Boolean lowCase){
         String exp = "%0" + String.valueOf(width) + "x";
         exp = String.format(exp, value);
         if (preEn == true) {
             exp = "0x" + exp;
-        }
-        if (posEn == true){
+        } else {
             exp = exp + "h";
         }
         if (lowCase == false){
             exp = exp.toUpperCase();
         }
         return exp;
+    }
+
+    public static String int2HexString(Integer value, Integer width){
+        return int2HexString(value, width, true, false);
     }
 }
