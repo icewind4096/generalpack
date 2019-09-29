@@ -5,7 +5,7 @@ import com.mindmotion.dao.DesigncodeDAO;
 import com.mindmotion.domain.Designcode;
 import com.mindmotion.dto.DesigncodeDTO;
 import com.mindmotion.enums.ResultEnum;
-import com.mindmotion.exception.DesigncodeException;
+import com.mindmotion.exception.GeneratePackException;
 import com.mindmotion.service.DesigncodeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class DesigncodeServiceImpl implements DesigncodeService {
         if (result == null){
             return edit(designcodeDTO);
         } else {
-            throw new DesigncodeException(ResultEnum.DESIGNCODE_EXIST);
+            throw new GeneratePackException(ResultEnum.DESIGNCODE_EXIST);
         }
     }
 
@@ -47,7 +47,7 @@ public class DesigncodeServiceImpl implements DesigncodeService {
         if (result != null){
             return edit(designcodeDTO);
         } else {
-            throw new DesigncodeException(ResultEnum.DESIGNCODE_NOT_EXIST);
+            throw new GeneratePackException(ResultEnum.DESIGNCODE_NOT_EXIST);
         }
     }
 

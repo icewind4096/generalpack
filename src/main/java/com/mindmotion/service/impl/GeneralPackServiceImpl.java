@@ -13,7 +13,7 @@ import com.mindmotion.dto.DDFMemoryDTO;
 import com.mindmotion.dto.DesigncodeDTO;
 import com.mindmotion.dto.PartDTO;
 import com.mindmotion.enums.ResultEnum;
-import com.mindmotion.exception.DesigncodeException;
+import com.mindmotion.exception.GeneratePackException;
 import com.mindmotion.pack.iar.IARFileFactory;
 import com.mindmotion.pack.iar.common.IARPathUtil;
 import com.mindmotion.service.GeneralPackService;
@@ -54,13 +54,13 @@ public class GeneralPackServiceImpl implements GeneralPackService {
     public Integer generateIARPackByPartName(String rootDirectory, String partName) {
         Part part = partDAO.findByPartname(partName);
         if (part == null){
-            throw new DesigncodeException(ResultEnum.SUBPARTFAMILY_NAME_NOT_EXITS);
+            throw new GeneratePackException(ResultEnum.SUBPARTFAMILY_NAME_NOT_EXITS);
         }
         PartDTO partDTO = Part2PartDTOConvert.convert(part);
 
         Designcode designcode = designcodeDAO.findByPartNameParam(partDTO.getPartname());
         if (part == null){
-            throw new DesigncodeException(ResultEnum.DESIGNCODE_NOT_EXIST);
+            throw new GeneratePackException(ResultEnum.DESIGNCODE_NOT_EXIST);
         }
         DesigncodeDTO designcodeDTO = Designcode2DesigncodeDTOConvert.convert(designcode);
 
