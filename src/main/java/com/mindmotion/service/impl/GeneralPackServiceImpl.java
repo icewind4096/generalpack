@@ -65,6 +65,9 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         DesigncodeDTO designcodeDTO = Designcode2DesigncodeDTOConvert.convert(designcode);
 
         List<DDFMemory> ddfMemoryList = ddfMemoryDAO.findAllByName(designcode.getDdfname());
+        if (ddfMemoryList == null){
+            throw new GeneratePackException(ResultEnum.DESIGNCODE_NOT_EXIST);
+        }
         List<DDFMemoryDTO> ddfMemoryDTOList = DDFMemory2DDFMemoryDTOConvert.convert(ddfMemoryList);
 
         generate4Devices(rootDirectory, COMPANYNAME, partName, partDTO, designcodeDTO);
