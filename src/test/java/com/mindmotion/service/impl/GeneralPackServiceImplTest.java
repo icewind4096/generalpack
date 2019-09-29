@@ -6,7 +6,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.ResourceUtils;
 
 import static org.junit.Assert.*;
 
@@ -21,8 +24,9 @@ public class GeneralPackServiceImplTest {
 
     @Test
     public void generalIARPack() throws Exception {
-        Integer value = generalPackService.generateIARPackByPartName("MM32F032K6U6");
-        Assert.assertEquals(0, 0);
+        Resource resource = new ClassPathResource("");
+        Integer value = generalPackService.generateIARPackByPartName(resource.getURI().getPath(),"MM32F032K6U6");
+        Assert.assertEquals(Integer.valueOf(0), value);
     }
 
     @Test
