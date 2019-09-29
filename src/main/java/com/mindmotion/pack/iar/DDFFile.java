@@ -37,7 +37,7 @@ public class DDFFile {
 
     private void putMemorysData(StringBuilder stringBuilder, List<DDFMemoryDTO> ddfMemoryDTOList, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
         stringBuilder.append(";; Memory information ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;\n");
-        stringBuilder.append(";;");
+        stringBuilder.append(";;\n");
         stringBuilder.append(";; Used to define address zones within the ARM address space (Memory).\n");
         stringBuilder.append(";;\n");
         stringBuilder.append(";;   Name      may be almost anything\n");
