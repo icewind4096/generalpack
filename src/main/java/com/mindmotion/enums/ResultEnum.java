@@ -10,6 +10,7 @@ public enum ResultEnum {
     DESIGNCODE_EXIST(10, "设计代码已存在"),
     DESIGNCODE_NOT_EXIST(20, "设计代码不存在"),
     SUBPARTFAMILY_NAME_NOT_EXITS(100, "器件不存在"),
+    DDFMEMORY_NOT_EXIST(200, "DDFMemory不存在"),
     GENERAL_PACK_IAR_MENU_FAIL(1000, "产生IAR pack文件中Menu文件出错"),
     GENERAL_PACK_FAIL(1020, "产生PACK包失败, 未知错误"),
     ;
