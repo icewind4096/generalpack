@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by mecwa on 2019/9/28.
  */
-public class IARFile {
+public class IARFileFactory {
     public static boolean makeDeviceDirectory(String directoryName) {
         FileUtils.makeDirs(directoryName);
         return true;
