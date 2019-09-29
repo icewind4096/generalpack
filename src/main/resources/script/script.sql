@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `part` (
 -- 正在导出表  mindmotion.part 的数据：~1 rows (大约)
 /*!40000 ALTER TABLE `part` DISABLE KEYS */;
 INSERT INTO `part` (`id`, `familyname`, `partname`, `flashloadname`, `tag`, `displayname`, `freq`, `flashsize`, `ramsize`, `ips`, `crtime`) VALUES
-	(1, 'MM32F032', 'MM32F032K6U6', 'MM32F032x6', 'MM32F032K6U6', 'MM32F032K6U6', 72000000, 32768, 8192, '{}', '2019-09-26 12:32:22');
+	(1, 'MM32F032', 'MM32F032K6U6', 'MM32F032x6', 'MM32F032K6U6', 'MindMotion MM32F032K6U6', 72000000, 32768, 8192, '{}', '2019-09-26 12:32:22');
 /*!40000 ALTER TABLE `part` ENABLE KEYS */;
 
 -- 导出  表 mindmotion.partfamily 结构
