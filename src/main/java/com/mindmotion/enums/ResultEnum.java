@@ -7,6 +7,7 @@ import lombok.Getter;
  */
 @Getter
 public enum ResultEnum {
+    PARMATER_ERROR(1, "参数错误"),
     DESIGNCODE_EXIST(10, "设计代码已存在"),
     DESIGNCODE_NOT_EXIST(20, "设计代码不存在"),
     SUBPARTFAMILY_NAME_NOT_EXITS(100, "器件不存在"),
