@@ -36,7 +36,7 @@ public class GeneralPackServiceImpl implements GeneralPackService {
     @Autowired
     DDFMemoryDAO ddfMemoryDAO;
 
-    private final String COMPANYNAME = "mindmotion";
+    private final String COMPANYNAME = "MindMotion";
 
     // TODO: 2019/9/26 后期数据有redis中获得，启动时，先把数据调理以后放入redis, 此处先模拟一些数据
     private String getFamilyPath(String partName) {
@@ -81,6 +81,8 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         String directory = IARPathUtil.getDebugFilePath(rootDirectory, companyname);
         if (IARFileFactory.makeDebugDirectory(directory) == true) {
             IARFileFactory.generateDDFFile(IARPathUtil.getDDFFileName(directory, partDTO.getPartname()), coreName, ddfMemoryDTOList, designcodeDTO, partDTO);
+            IARFileFactory.generateDMACFile(IARPathUtil.getDMACFileName(directory, designcodeDTO.getDmacname()), designcodeDTO.getDmacname());
+            IARFileFactory.generateProbeScript(IARPathUtil.getProbeScriptFileName(directory, "MM32"));
         }
 
         return false;

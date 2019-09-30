@@ -23,12 +23,12 @@ import java.util.List;
  * Created by mecwa on 2019/9/28.
  */
 public class IARFileFactory {
-    public static boolean makeDeviceDirectory(String directoryName) {
+    public static Boolean makeDeviceDirectory(String directoryName) {
         FileUtils.makeDirs(directoryName);
         return true;
     }
 
-    public static boolean generateI79File(String fileName, String companyName, String partName, DesigncodeDTO designcodeDTO) {
+    public static Boolean generateI79File(String fileName, String companyName, String partName, DesigncodeDTO designcodeDTO) {
         I79File i79File = new I79File(companyName, partName, designcodeDTO);
         return i79File.saveToFile(fileName);
     }
@@ -38,13 +38,23 @@ public class IARFileFactory {
         return menuFile.saveToFile(fileName);
     }
 
-    public static boolean makeDebugDirectory(String directoryName) {
+    public static Boolean makeDebugDirectory(String directoryName) {
         FileUtils.makeDirs(directoryName);
         return true;
     }
 
-    public static boolean generateDDFFile(String fileName, String coreName, List<DDFMemoryDTO> ddfMemoryDTOList, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
+    public static Boolean generateDDFFile(String fileName, String coreName, List<DDFMemoryDTO> ddfMemoryDTOList, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
         DDFFile ddfFile = new DDFFile(coreName, ddfMemoryDTOList, designcodeDTO, partDTO);
         return ddfFile.saveToFile(fileName);
+    }
+
+    public static Boolean generateDMACFile(String fileName, String dmacName) {
+        DMACFile dmacFile = new DMACFile(dmacName);
+        return dmacFile.saveToFile(fileName);
+    }
+
+    public static Boolean generateProbeScript(String fileName) {
+        ProbeScriptFile probeScriptFile = new ProbeScriptFile();
+        return probeScriptFile.saveToFile(fileName);
     }
 }

@@ -15,10 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.xml.transform.Result;
@@ -38,6 +35,7 @@ public class DesignCodeController {
     @Autowired
     DesigncodeService designcodeService;
 
+    @PostMapping("/create")
     public ResultVO create(@Valid DesigncodeForm designcodeForm, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             log.error("[创建Desigcode]->参数不正确， orderForm={}", designcodeForm);

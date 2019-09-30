@@ -78,15 +78,15 @@ public class DDFFile {
 
     private void putCoreData4M3(StringBuilder stringBuilder) {
         stringBuilder.append(";; Architecture extensions\n");
-        stringBuilder.append("#include weak \"..\\ARM\\ARMv7-M-ETM.ddf\n");
-        stringBuilder.append("#include weak \"..\\ARM\\ARMv7-M-TPIU.ddf\n");
-        stringBuilder.append("#include weak \"..\\ARM\\ARMv7-M-MPU.ddf\n");
+        stringBuilder.append("#include weak \"..\\ARM\\ARMv7-M-ETM.ddf\"\n");
+        stringBuilder.append("#include weak \"..\\ARM\\ARMv7-M-TPIU.ddf\"\n");
+        stringBuilder.append("#include weak \"..\\ARM\\ARMv7-M-MPU.ddf\"\n");
         stringBuilder.append("\n");
     }
 
     private void putCoreData4M0(StringBuilder stringBuilder) {
         stringBuilder.append(";; Architecture extensions\n");
-        stringBuilder.append("#include weak \"..\\ARM\\ARMv6-M-SYST.ddf\n");
+        stringBuilder.append("#include weak \"..\\ARM\\ARMv6-M-SYST.ddf\"\n");
         stringBuilder.append("\n");
     }
 }

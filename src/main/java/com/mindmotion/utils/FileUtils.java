@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Created by mecwa on 2019/9/26.
@@ -23,6 +25,21 @@ public class FileUtils {
             bufferedWriter.write(stringBuilder.toString());
             bufferedWriter.flush();
             bufferedWriter.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static Boolean copyFile(String sourceFileName, String targetFileName, Boolean replaceEn) {
+        try {
+            File source = new File(sourceFileName);
+
+            File target = new File(targetFileName);
+
+            Files.copy(source.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
             return true;
         } catch (IOException e) {
             e.printStackTrace();

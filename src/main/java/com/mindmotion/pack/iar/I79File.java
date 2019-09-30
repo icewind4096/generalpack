@@ -5,6 +5,9 @@ import com.mindmotion.pack.iar.common.IARPathUtil;
 import com.mindmotion.utils.FileUtils;
 import com.mindmotion.utils.StringUtils;
 
+import static com.mindmotion.pack.iar.common.IARPathUtil.getDebugFilePath;
+import static com.mindmotion.pack.iar.common.IARPathUtil.getSysTookKitDir;
+
 /**
  * Created by MMNJ002 on 2019/9/29.
  */
@@ -34,40 +37,40 @@ public class I79File {
 
         putDDFData(stringBuilder, getDDFFileName(companyName, partName));
 
-        putLinkerData(stringBuilder, IARPathUtil.getLinkerFileName(companyName, partName));
+        putLinkerData(stringBuilder, IARPathUtil.getLinkerFileName(getSysTookKitDir(), companyName, partName));
 
-        putFlashLoaderData(stringBuilder, IARPathUtil.getBoardFileName(companyName, partName));
+        putFlashLoaderData(stringBuilder, IARPathUtil.getBoardFileName(getSysTookKitDir(), companyName, partName));
     }
 
     private String getDDFFileName(String companyName, String partName) {
-        return String.format("%s\\%s", companyName, partName);
+        return String.format("%s\\%s%s", companyName, partName, ".DDF");
     }
 
-    private static void putFlashLoaderData(StringBuilder stringBuilder, String boardFileName) {
-        stringBuilder.append("[FLASH LORDER]\n");
+    private void putFlashLoaderData(StringBuilder stringBuilder, String boardFileName) {
+        stringBuilder.append("[FLASH LOADER]\n");
         stringBuilder.append(String.format("%s=%s\n", "little", boardFileName));
         stringBuilder.append("\n");
     }
 
-    private static void putLinkerData(StringBuilder stringBuilder, String linkerFileName) {
+    private void putLinkerData(StringBuilder stringBuilder, String linkerFileName) {
         stringBuilder.append("[LINKER FILE]\n");
         stringBuilder.append(String.format("%s=%s\n", "name", linkerFileName));
         stringBuilder.append("\n");
     }
 
-    private static void putDDFData(StringBuilder stringBuilder, String ddfFileName) {
+    private void putDDFData(StringBuilder stringBuilder, String ddfFileName) {
         stringBuilder.append("[DDF FILE]\n");
         stringBuilder.append(String.format("%s=%s\n", "name", ddfFileName));
         stringBuilder.append("\n");
     }
 
-    private static void putCoreData(StringBuilder stringBuilder, String corename) {
+    private void putCoreData(StringBuilder stringBuilder, String corename) {
         stringBuilder.append("[CORE]\n");
         stringBuilder.append(String.format("%s=%s\n", "name", corename));
         stringBuilder.append("\n");
     }
 
-    private static void putChipData(StringBuilder stringBuilder, String partName, String companyName, DesigncodeDTO designcodeDTO) {
+    private void putChipData(StringBuilder stringBuilder, String partName, String companyName, DesigncodeDTO designcodeDTO) {
         stringBuilder.append("[CHIP]\n");
         stringBuilder.append(String.format("%s=%s\n", "name", partName));
         stringBuilder.append(String.format("%s=%s\n", "endiansupport", getEndian(designcodeDTO.getEndian())));
@@ -75,12 +78,16 @@ public class I79File {
         stringBuilder.append(String.format("%s=%s\n", "armsupport", StringUtils.int2BoolString(designcodeDTO.getArmsupport())));
         stringBuilder.append(String.format("%s=%s\n", "fpu", getFPU(designcodeDTO.getFpu())));
         stringBuilder.append(String.format("%s=%s\n", "simd", StringUtils.int2BoolString(designcodeDTO.getSimd())));
-        stringBuilder.append(String.format("%s=%s\n", "ProbeScriptFile", IARPathUtil.getProbeScriptFileName(companyName)));
-        stringBuilder.append(String.format("%s=%s\n", "DeviceMacros", IARPathUtil.getDMACFileName(companyName, partName)));
+        stringBuilder.append(String.format("%s=%s\n", "ProbeScriptFile", getProbeScriptFileName(companyName)));
+        stringBuilder.append(String.format("%s=%s\n", "DeviceMacros", IARPathUtil.getDMACFileName(getDebugFilePath(getSysTookKitDir(), companyName), designcodeDTO.getDmacname())));
         stringBuilder.append(String.format("%s=%s\n", "JTAG", StringUtils.int2BoolString(designcodeDTO.getJtag())));
         stringBuilder.append(String.format("%s=%s\n", "SWD", StringUtils.int2BoolString(designcodeDTO.getSwd())));
         stringBuilder.append(String.format("%s=%s\n", "SWO_TraceD0", StringUtils.int2BoolString(designcodeDTO.getSwotraced0())));
         stringBuilder.append("\n");
+    }
+
+    public String getProbeScriptFileName(String companyName) {
+        return String.format("%s%s%s", getDebugFilePath(getSysTookKitDir(), companyName), "MM32", ".ProbeScript");
     }
 
     private static String getFPU(Integer fpu) {

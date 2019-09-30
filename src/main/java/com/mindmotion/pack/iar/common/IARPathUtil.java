@@ -47,27 +47,27 @@ public class IARPathUtil {
         return getPartFileName(directory, partName, ".menu");
     }
 
-    public static String getBoardFileName(String companyName, String partName) {
-        return getPartFileName(getFlashLoadFilePath(getSysTookKitDir(), companyName), partName, ".board");
+    public static String getBoardFileName(String directory, String companyName, String partName) {
+        return getPartFileName(getFlashLoadFilePath(directory, companyName), partName, ".board");
     }
 
-    public static String getLinkerFileName(String companyName, String partName) {
-        return getPartFileName(getLinkerFilePath(getSysTookKitDir(), companyName), partName, ".icf");
+    public static String getLinkerFileName(String directory, String companyName, String partName) {
+        return getPartFileName(getLinkerFilePath(directory, companyName), partName, ".icf");
     }
 
     public static String getDDFFileName(String companyName, String partName) {
         return getPartFileName(companyName, partName, ".ddf");
     }
 
-    public static String getDMACFileName(String companyName, String partName) {
-        return getPartFileName(getDebugFilePath(getSysTookKitDir(), companyName), partName, ".dmac");
-    }
-
-    public static String getProbeScriptFileName(String companyName) {
-        return getPartFileName(getDebugFilePath(getSysTookKitDir(), companyName), "MM32", ".ProbeScript");
-    }
-
     public static String getI79FileName(String directory, String partName) {
         return getPartFileName(directory, partName, ".i79");
+    }
+
+    public static String getDMACFileName(String directory, String dmacName) {
+        return getPartFileName(directory, dmacName, ".dmac");
+    }
+
+    public static String getProbeScriptFileName(String directory, String probeScriptName) {
+        return getPartFileName(directory, probeScriptName, ".ProbeScript");
     }
 }
