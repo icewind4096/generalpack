@@ -105,7 +105,7 @@ public class GeneralPackServiceImpl implements GeneralPackService {
     private Boolean generate4Devices(String rootDirectory, String company, PartDTO partDTO, DesigncodeDTO designcodeDTO) {
         String directory = IARPathUtil.getDeviceFilePath(rootDirectory, company, getFamilyPath(partDTO.getPartname()));
         if (IARFileFactory.makeDeviceDirectory(directory) == true) {
-            IARFileFactory.generateMenuFile(IARPathUtil.getMenuFileName(rootDirectory, partDTO.getPartname()), partDTO);
+            IARFileFactory.generateMenuFile(IARPathUtil.getMenuFileName(rootDirectory, company, getFamilyPath(partDTO.getPartname()), partDTO.getPartname()), partDTO);
             IARFileFactory.generateI79File(IARPathUtil.getI79FileName(rootDirectory, company, getFamilyPath(partDTO.getPartname()), partDTO.getPartname()), company, partDTO.getPartname(), designcodeDTO);
             return true;
         }

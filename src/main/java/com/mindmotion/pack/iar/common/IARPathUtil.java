@@ -43,8 +43,8 @@ public class IARPathUtil {
         return String.format("%s\\%s", IARSysPathEnum.SYSTEM_PATH_TOOLKITDIR.getMessage(), "config");
     }
 
-    public static String getMenuFileName(String directory, String partName) {
-        return getPartFileName(directory, partName, ".menu");
+    public static String getMenuFileName(String directory, String companyName, String familyName, String partName) {
+        return getPartFileName(getDeviceFilePath(directory, companyName, familyName), partName, ".menu");
     }
 
     public static String getBoardFileName(String directory, String companyName, String partName) {
