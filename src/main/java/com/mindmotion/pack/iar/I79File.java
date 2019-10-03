@@ -37,7 +37,7 @@ public class I79File {
 
         putDDFData(stringBuilder, getDDFFileName(companyName, partName));
 
-        putLinkerData(stringBuilder, IARPathUtil.getLinkerFileName(getSysTookKitDir(), companyName, partName));
+        putLinkerData(stringBuilder, IARPathUtil.getICFFileName(getSysTookKitDir(), companyName, partName));
 
         putFlashLoaderData(stringBuilder, IARPathUtil.getBoardFileName(getSysTookKitDir(), companyName, partName));
     }
@@ -79,7 +79,7 @@ public class I79File {
         stringBuilder.append(String.format("%s=%s\n", "fpu", getFPU(designcodeDTO.getFpu())));
         stringBuilder.append(String.format("%s=%s\n", "simd", StringUtils.int2BoolString(designcodeDTO.getSimd())));
         stringBuilder.append(String.format("%s=%s\n", "ProbeScriptFile", getProbeScriptFileName(companyName)));
-        stringBuilder.append(String.format("%s=%s\n", "DeviceMacros", IARPathUtil.getDMACFileName(getDebugFilePath(getSysTookKitDir(), companyName), designcodeDTO.getDmacname())));
+        stringBuilder.append(String.format("%s=%s\n", "DeviceMacros", IARPathUtil.getDMACFileName(getSysTookKitDir(), companyName, designcodeDTO.getDmacname())));
         stringBuilder.append(String.format("%s=%s\n", "JTAG", StringUtils.int2BoolString(designcodeDTO.getJtag())));
         stringBuilder.append(String.format("%s=%s\n", "SWD", StringUtils.int2BoolString(designcodeDTO.getSwd())));
         stringBuilder.append(String.format("%s=%s\n", "SWO_TraceD0", StringUtils.int2BoolString(designcodeDTO.getSwotraced0())));

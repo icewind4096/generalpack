@@ -70,31 +70,43 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         }
         List<DDFMemoryDTO> ddfMemoryDTOList = DDFMemory2DDFMemoryDTOConvert.convert(ddfMemoryList);
 
-        generate4Devices(rootDirectory, COMPANYNAME, partName, partDTO, designcodeDTO);
+        generate4Devices(rootDirectory, COMPANYNAME, partDTO, designcodeDTO);
 
         generate4Debug(rootDirectory, COMPANYNAME, partDTO, designcode.getCorename(), ddfMemoryDTOList, designcodeDTO);
+
+        generate4Linker(rootDirectory, COMPANYNAME, designcodeDTO, partDTO);
 
         return 0;
     }
 
-    private Boolean generate4Debug(String rootDirectory, String companyname, PartDTO partDTO, String coreName, List<DDFMemoryDTO> ddfMemoryDTOList, DesigncodeDTO designcodeDTO) {
-        String directory = IARPathUtil.getDebugFilePath(rootDirectory, companyname);
+    private boolean generate4Linker(String rootDirectory, String companyName, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
+        String directory = IARPathUtil.getLinkerFilePath(rootDirectory, companyName);
         if (IARFileFactory.makeDebugDirectory(directory) == true) {
-            IARFileFactory.generateDDFFile(IARPathUtil.getDDFFileName(directory, partDTO.getPartname()), coreName, ddfMemoryDTOList, designcodeDTO, partDTO);
-            IARFileFactory.generateDMACFile(IARPathUtil.getDMACFileName(directory, designcodeDTO.getDmacname()), designcodeDTO.getDmacname());
-            IARFileFactory.generateProbeScript(IARPathUtil.getProbeScriptFileName(directory, "MM32"));
-            IARFileFactory.generateSVDFile(IARPathUtil.getSVDFileName(directory, partDTO.getPartname()), partDTO.getPartname());
-
+            IARFileFactory.generateICFFile(IARPathUtil.getICFFileName(rootDirectory, companyName, partDTO.getPartname()), designcodeDTO, partDTO);
+            return true;
         }
 
         return false;
     }
 
-    private Boolean generate4Devices(String rootDirectory, String company, String partName, PartDTO partDTO, DesigncodeDTO designcodeDTO) {
-        String directory = IARPathUtil.getDeviceFilePath(rootDirectory, company, getFamilyPath(partName));
+    private Boolean generate4Debug(String rootDirectory, String companyname, PartDTO partDTO, String coreName, List<DDFMemoryDTO> ddfMemoryDTOList, DesigncodeDTO designcodeDTO) {
+        String directory = IARPathUtil.getDebugFilePath(rootDirectory, companyname);
+        if (IARFileFactory.makeDebugDirectory(directory) == true) {
+            IARFileFactory.generateDDFFile(IARPathUtil.getDDFFileName(rootDirectory, companyname, partDTO.getPartname()), coreName, ddfMemoryDTOList, designcodeDTO, partDTO);
+            IARFileFactory.generateDMACFile(IARPathUtil.getDMACFileName(rootDirectory, companyname, designcodeDTO.getDmacname()), designcodeDTO.getDmacname());
+            IARFileFactory.generateProbeScript(IARPathUtil.getProbeScriptFileName(rootDirectory, companyname, "MM32"));
+            IARFileFactory.generateSVDFile(IARPathUtil.getSVDFileName(rootDirectory, companyname, partDTO.getPartname()), partDTO.getPartname());
+            return true;
+        }
+
+        return false;
+    }
+
+    private Boolean generate4Devices(String rootDirectory, String company, PartDTO partDTO, DesigncodeDTO designcodeDTO) {
+        String directory = IARPathUtil.getDeviceFilePath(rootDirectory, company, getFamilyPath(partDTO.getPartname()));
         if (IARFileFactory.makeDeviceDirectory(directory) == true) {
-            IARFileFactory.generateMenuFile(IARPathUtil.getMenuFileName(directory, partName), partDTO);
-            IARFileFactory.generateI79File(IARPathUtil.getI79FileName(directory, partName), company, partName, designcodeDTO);
+            IARFileFactory.generateMenuFile(IARPathUtil.getMenuFileName(rootDirectory, partDTO.getPartname()), partDTO);
+            IARFileFactory.generateI79File(IARPathUtil.getI79FileName(rootDirectory, company, getFamilyPath(partDTO.getPartname()), partDTO.getPartname()), company, partDTO.getPartname(), designcodeDTO);
             return true;
         }
         return false;
@@ -105,3 +117,4 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         return null;
     }
 }
+

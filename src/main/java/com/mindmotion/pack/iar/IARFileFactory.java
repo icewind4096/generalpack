@@ -62,4 +62,10 @@ public class IARFileFactory {
         SVDFile svdFile = new SVDFile(partname);
         return svdFile.saveToFile(fileName);
     }
+
+    public static Boolean generateICFFile(String fileName, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
+        ICFFile icfFile = new ICFFile(designcodeDTO.getIntvecbase(), designcodeDTO.getFlashbase(), partDTO.getFlashsize()
+                                     ,designcodeDTO.getRambase(), partDTO.getRamsize());
+        return icfFile.saveToFile(fileName);
+    }
 }

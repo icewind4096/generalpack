@@ -15,7 +15,7 @@ public class IARPathUtil {
         return getDiretoryByType(rootDirectory, "debugger", companyName);
     }
 
-    private static String getLinkerFilePath(String rootDirectory, String companyName) {
+    public static String getLinkerFilePath(String rootDirectory, String companyName) {
         return getDiretoryByType(rootDirectory, "linker", companyName);
     }
 
@@ -51,28 +51,28 @@ public class IARPathUtil {
         return getPartFileName(getFlashLoadFilePath(directory, companyName), partName, ".board");
     }
 
-    public static String getLinkerFileName(String directory, String companyName, String partName) {
+    public static String getICFFileName(String directory, String companyName, String partName) {
         return getPartFileName(getLinkerFilePath(directory, companyName), partName, ".icf");
     }
 
-    public static String getDDFFileName(String companyName, String partName) {
-        return getPartFileName(companyName, partName, ".ddf");
+    public static String getDDFFileName(String directory, String companyName, String partName) {
+        return getPartFileName(getDebugFilePath(directory, companyName), partName, ".ddf");
     }
 
-    public static String getI79FileName(String directory, String partName) {
-        return getPartFileName(directory, partName, ".i79");
+    public static String getI79FileName(String directory, String companyName, String familyName, String partName) {
+        return getPartFileName(getDeviceFilePath(directory, companyName, familyName), partName, ".i79");
     }
 
-    public static String getDMACFileName(String directory, String dmacName) {
-        return getPartFileName(directory, dmacName, ".dmac");
+    public static String getDMACFileName(String directory, String companyName, String dmacName) {
+        return getPartFileName(getDebugFilePath(directory, companyName), dmacName, ".dmac");
     }
 
-    public static String getProbeScriptFileName(String directory, String probeScriptName) {
-        return getPartFileName(directory, probeScriptName, ".ProbeScript");
+    public static String getProbeScriptFileName(String directory, String companyName, String probeScriptName) {
+        return getPartFileName(getDebugFilePath(directory, companyName), probeScriptName, ".ProbeScript");
     }
 
-    public static String getSVDFileName(String directory, String partname) {
-        return getPartFileName(directory, partname, ".svd");
+    public static String getSVDFileName(String directory, String companyName, String partname) {
+        return getPartFileName(getDebugFilePath(directory, companyName), partname, ".svd");
     }
 
     public static String getIARTemplatePath() {
