@@ -57,4 +57,9 @@ public class IARFileFactory {
         ProbeScriptFile probeScriptFile = new ProbeScriptFile();
         return probeScriptFile.saveToFile(fileName);
     }
+
+    public static Boolean generateSVDFile(String fileName, String partname) {
+        SVDFile svdFile = new SVDFile(partname);
+        return svdFile.saveToFile(fileName);
+    }
 }

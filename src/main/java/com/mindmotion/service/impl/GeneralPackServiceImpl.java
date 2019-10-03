@@ -83,6 +83,8 @@ public class GeneralPackServiceImpl implements GeneralPackService {
             IARFileFactory.generateDDFFile(IARPathUtil.getDDFFileName(directory, partDTO.getPartname()), coreName, ddfMemoryDTOList, designcodeDTO, partDTO);
             IARFileFactory.generateDMACFile(IARPathUtil.getDMACFileName(directory, designcodeDTO.getDmacname()), designcodeDTO.getDmacname());
             IARFileFactory.generateProbeScript(IARPathUtil.getProbeScriptFileName(directory, "MM32"));
+            IARFileFactory.generateSVDFile(IARPathUtil.getSVDFileName(directory, partDTO.getPartname()), partDTO.getPartname());
+
         }
 
         return false;

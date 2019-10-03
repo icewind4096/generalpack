@@ -1,20 +1,28 @@
 package com.mindmotion.pack.iar;
 
+import com.mindmotion.pack.iar.common.IARPathUtil;
 import com.mindmotion.utils.FileUtils;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
+
 
 /**
  * Created by MMNJ002 on 2019/9/30.
  */
 public class ProbeScriptFile {
     public Boolean saveToFile(String fileName) {
-        return FileUtils.copyFile(getProbeScriptFileName(), fileName, true);
+        try {
+            return FileUtils.copyFile(getProbeScriptFileName(), fileName, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    private String getProbeScriptFileName() {
-        Resource resource = new ClassPathResource("packfiletemplate\\iar");
-        return String.format("%s\\%s.dmac", resource.getURI().getPath(), dmacName);
+    private String getProbeScriptFileName() throws IOException {
+        return String.format("%s\\%s.ProbeScript", IARPathUtil.getIARTemplatePath(), "MM32");
     }
 }
 

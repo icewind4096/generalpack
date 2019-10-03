@@ -1,7 +1,7 @@
 package com.mindmotion.pack.iar.common;
 
-import com.mindmotion.dto.PartDTO;
 import com.mindmotion.enums.IARSysPathEnum;
+import com.mindmotion.utils.FileUtils;
 
 /**
  * Created by MMNJ002 on 2019/9/29.
@@ -69,5 +69,13 @@ public class IARPathUtil {
 
     public static String getProbeScriptFileName(String directory, String probeScriptName) {
         return getPartFileName(directory, probeScriptName, ".ProbeScript");
+    }
+
+    public static String getSVDFileName(String directory, String partname) {
+        return getPartFileName(directory, partname, ".svd");
+    }
+
+    public static String getIARTemplatePath() {
+        return FileUtils.getResourcePath("packfiletemplate\\iar");
     }
 }

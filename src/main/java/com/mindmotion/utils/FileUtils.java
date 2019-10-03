@@ -1,5 +1,8 @@
 package com.mindmotion.utils;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -44,6 +47,16 @@ public class FileUtils {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public static String getResourcePath(String path) {
+        Resource resource = new ClassPathResource(path);
+        try {
+            return resource.getURI().getPath();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
         }
     }
 }

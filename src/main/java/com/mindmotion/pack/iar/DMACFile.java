@@ -1,13 +1,9 @@
 package com.mindmotion.pack.iar;
 
+import com.mindmotion.pack.iar.common.IARPathUtil;
 import com.mindmotion.utils.FileUtils;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 /**
  * Created by MMNJ002 on 2019/9/30.
@@ -29,7 +25,6 @@ public class DMACFile {
     }
 
     private String getDMACFileName(String dmacName) throws IOException {
-        Resource resource = new ClassPathResource("packfiletemplate\\iar");
-        return String.format("%s\\%s.dmac", resource.getURI().getPath(), dmacName);
+        return String.format("%s\\%s.dmac", IARPathUtil.getIARTemplatePath(), dmacName);
     }
 }
