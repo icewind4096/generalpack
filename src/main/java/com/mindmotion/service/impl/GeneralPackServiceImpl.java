@@ -76,10 +76,22 @@ public class GeneralPackServiceImpl implements GeneralPackService {
 
         generate4Linker(rootDirectory, COMPANYNAME, designcodeDTO, partDTO);
 
+        generate4FlashLoad(rootDirectory, COMPANYNAME, designcode, partDTO);
+
         return 0;
     }
 
-    private boolean generate4Linker(String rootDirectory, String companyName, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
+    private Boolean generate4FlashLoad(String rootDirectory, String companyName, Designcode designcode, PartDTO partDTO) {
+        String directory = IARPathUtil.getFlashLoadFilePath(rootDirectory, companyName);
+        if (IARFileFactory.makeDebugDirectory(directory) == true) {
+            IARFileFactory.generateFlashFile(IARPathUtil.getBoardFileName(rootDirectory, companyName, partDTO.getPartname()), companyName, designcode.getFlashbase(), partDTO.getFlashsize(), partDTO.getPartname());
+            return true;
+        }
+
+        return false;
+    }
+
+    private Boolean generate4Linker(String rootDirectory, String companyName, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
         String directory = IARPathUtil.getLinkerFilePath(rootDirectory, companyName);
         if (IARFileFactory.makeDebugDirectory(directory) == true) {
             IARFileFactory.generateICFFile(IARPathUtil.getICFFileName(rootDirectory, companyName, partDTO.getPartname()), designcodeDTO, partDTO);

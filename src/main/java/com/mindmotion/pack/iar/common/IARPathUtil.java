@@ -19,7 +19,7 @@ public class IARPathUtil {
         return getDiretoryByType(rootDirectory, "linker", companyName);
     }
 
-    private static String getFlashLoadFilePath(String rootDirectory, String companyName) {
+    public static String getFlashLoadFilePath(String rootDirectory, String companyName) {
         return getDiretoryByType(rootDirectory, "flashloader", companyName);
     }
 
@@ -77,5 +77,9 @@ public class IARPathUtil {
 
     public static String getIARTemplatePath() {
         return FileUtils.getResourcePath("packfiletemplate\\iar");
+    }
+
+    public static String getFlashFileName(String directory, String companyName, String partName) {
+        return getPartFileName(getFlashLoadFilePath(directory, companyName), partName, ".flash");
     }
 }

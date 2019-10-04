@@ -68,4 +68,9 @@ public class IARFileFactory {
                                      ,designcodeDTO.getRambase(), partDTO.getRamsize());
         return icfFile.saveToFile(fileName);
     }
+
+    public static Boolean generateFlashFile(String fileName, String companyName, Integer flashbase, Integer flashsize, String partname) {
+        BoardFile boardFile = new BoardFile(companyName, flashbase, flashsize, partname);
+        return boardFile.saveToFile(fileName);
+    }
 }
