@@ -69,8 +69,13 @@ public class IARFileFactory {
         return icfFile.saveToFile(fileName);
     }
 
-    public static Boolean generateFlashFile(String fileName, String companyName, Integer flashbase, Integer flashsize, String partname) {
+    public static Boolean generateBoardFile(String fileName, String companyName, Integer flashbase, Integer flashsize, String partname) {
         BoardFile boardFile = new BoardFile(companyName, flashbase, flashsize, partname);
         return boardFile.saveToFile(fileName);
+    }
+
+    public static Boolean generateFlashFile(String flashFileName, String companyName, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
+        FlashFile flashFile = new FlashFile(companyName, designcodeDTO, partDTO);
+        return flashFile.saveToFile(flashFileName);
     }
 }

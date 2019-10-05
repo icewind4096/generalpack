@@ -12,6 +12,7 @@ import com.mindmotion.domain.Part;
 import com.mindmotion.dto.DDFMemoryDTO;
 import com.mindmotion.dto.DesigncodeDTO;
 import com.mindmotion.dto.PartDTO;
+import com.mindmotion.enums.IARSysPathEnum;
 import com.mindmotion.enums.ResultEnum;
 import com.mindmotion.exception.GeneratePackException;
 import com.mindmotion.pack.iar.IARFileFactory;
@@ -76,15 +77,16 @@ public class GeneralPackServiceImpl implements GeneralPackService {
 
         generate4Linker(rootDirectory, COMPANYNAME, designcodeDTO, partDTO);
 
-        generate4FlashLoad(rootDirectory, COMPANYNAME, designcode, partDTO);
+        generate4FlashLoad(rootDirectory, COMPANYNAME, designcodeDTO, partDTO);
 
         return 0;
     }
 
-    private Boolean generate4FlashLoad(String rootDirectory, String companyName, Designcode designcode, PartDTO partDTO) {
+    private Boolean generate4FlashLoad(String rootDirectory, String companyName, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
         String directory = IARPathUtil.getFlashLoadFilePath(rootDirectory, companyName);
         if (IARFileFactory.makeDebugDirectory(directory) == true) {
-            IARFileFactory.generateFlashFile(IARPathUtil.getBoardFileName(rootDirectory, companyName, partDTO.getPartname()), companyName, designcode.getFlashbase(), partDTO.getFlashsize(), partDTO.getPartname());
+            IARFileFactory.generateBoardFile(IARPathUtil.getBoardFileName(rootDirectory, companyName, partDTO.getPartname()), companyName, designcodeDTO.getFlashbase(), partDTO.getFlashsize(), partDTO.getPartname());
+            IARFileFactory.generateFlashFile(IARPathUtil.getFlashFileName(rootDirectory, companyName, partDTO.getPartname()), companyName, designcodeDTO, partDTO);
             return true;
         }
 
