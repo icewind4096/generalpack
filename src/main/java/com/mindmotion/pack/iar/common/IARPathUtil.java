@@ -82,4 +82,12 @@ public class IARPathUtil {
     public static String getFlashFileName(String directory, String companyName, String partName) {
         return getPartFileName(getFlashLoadFilePath(directory, companyName), partName, ".flash");
     }
+
+    public static String getOutFileName(String directory, String companyName, String partName) {
+        return getPartFileName(getFlashLoadFilePath(directory, companyName), partName, ".out");
+    }
+
+    public static String getMACFileName(String directory, String companyName, String partName) {
+        return getPartFileName(getFlashLoadFilePath(directory, companyName), partName, ".mac");
+    }
 }

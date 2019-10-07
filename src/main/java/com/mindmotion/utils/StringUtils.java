@@ -27,6 +27,6 @@ public class StringUtils {
     }
 
     public static String int2HexString(Integer value, Integer width){
-        return int2HexString(value, width, true, false);
+        return int2HexString(value, width, true, true);
     }
 }
