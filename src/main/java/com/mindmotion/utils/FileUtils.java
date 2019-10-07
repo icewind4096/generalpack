@@ -21,6 +21,23 @@ public class FileUtils {
         }
     }
 
+    public static Boolean delDirectorys(String directoryName){
+        File file = new File(directoryName);
+
+        if (file.exists() == false){
+            return true;
+        }
+
+        if (file.isDirectory() == true){
+            File[] files = file.listFiles();
+            for (File f : files){
+                delDirectorys(f.getPath());
+            }
+        }
+
+        return file.delete();
+    }
+
     public static boolean saveToFile(String fileName, StringBuilder stringBuilder){
         File file = new File(fileName);
         try {
@@ -58,5 +75,10 @@ public class FileUtils {
             e.printStackTrace();
             return "";
         }
+    }
+
+    public static String getParentDirectory(String rootDirectory) {
+        File file = new File(rootDirectory);
+        return file.getParent();
     }
 }

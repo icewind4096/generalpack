@@ -25,7 +25,7 @@ public class GeneralPackServiceImplTest {
     @Test
     public void generalIARPack() throws Exception {
         Resource resource = new ClassPathResource("");
-        Integer value = generalPackService.generateIARPackByPartName(resource.getURI().getPath(),"MM32F032K6U6");
+        Integer value = generalPackService.generateIARPackByPartName(resource.getURI().getPath() + "\\iartpack\\","MM32F032K6U6");
         Assert.assertEquals(Integer.valueOf(0), value);
     }
 

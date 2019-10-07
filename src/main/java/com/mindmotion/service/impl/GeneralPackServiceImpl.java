@@ -18,6 +18,8 @@ import com.mindmotion.exception.GeneratePackException;
 import com.mindmotion.pack.iar.IARFileFactory;
 import com.mindmotion.pack.iar.common.IARPathUtil;
 import com.mindmotion.service.GeneralPackService;
+import com.mindmotion.utils.FileUtils;
+import com.mindmotion.utils.ZipCompressFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -79,7 +81,16 @@ public class GeneralPackServiceImpl implements GeneralPackService {
 
         generate4FlashLoad(rootDirectory, COMPANYNAME, designcodeDTO, partDTO);
 
+        zipToPackFile("C:\\web\\mindmotion\\generalpack\\target\\test-classes\\iar.zip", rootDirectory);
+
+        FileUtils.delDirectorys(rootDirectory);
+
         return 0;
+    }
+
+    private Integer zipToPackFile(String fileName, String directory) {
+        ZipCompressFile zipCompressFile = new ZipCompressFile(fileName);
+        return zipCompressFile.compress(directory);
     }
 
     private Boolean generate4FlashLoad(String rootDirectory, String companyName, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
