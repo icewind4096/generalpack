@@ -16,15 +16,10 @@ public class DMACFile {
     }
 
     public Boolean saveToFile(String fileName) {
-        try {
-            return FileUtils.copyFile(getDMACFileName(dmacFileName), fileName, true);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return FileUtils.copyFile(getDMACFileName(dmacFileName), fileName, true);
     }
 
-    private String getDMACFileName(String dmacName) throws IOException {
+    private String getDMACFileName(String dmacName) {
         return String.format("%s\\%s.dmac", IARPathUtil.getIARTemplatePath(), dmacName);
     }
 }

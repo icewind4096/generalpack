@@ -87,6 +87,7 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         if (IARFileFactory.makeDebugDirectory(directory) == true) {
             IARFileFactory.generateBoardFile(IARPathUtil.getBoardFileName(rootDirectory, companyName, partDTO.getPartname()), companyName, designcodeDTO.getFlashbase(), partDTO.getFlashsize(), partDTO.getPartname());
             IARFileFactory.generateFlashFile(IARPathUtil.getFlashFileName(rootDirectory, companyName, partDTO.getPartname()), companyName, designcodeDTO, partDTO);
+            IARFileFactory.generateMacFile(IARPathUtil.getMACFileName(rootDirectory, companyName, designcodeDTO.getCorename()), designcodeDTO.getCorename());
             return true;
         }
 

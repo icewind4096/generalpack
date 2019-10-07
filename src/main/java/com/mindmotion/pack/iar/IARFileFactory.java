@@ -1,22 +1,10 @@
 package com.mindmotion.pack.iar;
 
-import com.mindmotion.domain.DDFMemory;
-import com.mindmotion.domain.Designcode;
 import com.mindmotion.dto.DDFMemoryDTO;
 import com.mindmotion.dto.DesigncodeDTO;
 import com.mindmotion.dto.PartDTO;
-import com.mindmotion.enums.IARSysPathEnum;
 import com.mindmotion.utils.FileUtils;
-import com.mindmotion.utils.StringUtils;
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.XMLWriter;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -74,8 +62,13 @@ public class IARFileFactory {
         return boardFile.saveToFile(fileName);
     }
 
-    public static Boolean generateFlashFile(String flashFileName, String companyName, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
+    public static Boolean generateFlashFile(String fileName, String companyName, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
         FlashFile flashFile = new FlashFile(companyName, designcodeDTO, partDTO);
-        return flashFile.saveToFile(flashFileName);
+        return flashFile.saveToFile(fileName);
+    }
+
+    public static Boolean generateMacFile(String fileName, String coreName) {
+        MacFile macFile = new MacFile(coreName);
+        return macFile.saveToFile(fileName);
     }
 }
