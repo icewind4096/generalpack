@@ -32,6 +32,7 @@ public class BoardFile {
         stringBuilder.append("<flash_board>\n");
         stringBuilder.append("  <pass>\n");
         stringBuilder.append(String.format("      <range>CODE %s %s</range>\n", StringUtils.int2HexString(flashBase, 8), StringUtils.int2HexString(flashBase + flashSize - 1, 8)));
+        // TODO: 2019/10/7 这里使用数据库了面的FlashlaodName字段，还是使用partName拼接 
         stringBuilder.append(String.format("      <loader>%s</loader>\n", IARPathUtil.getFlashFileName(IARSysPathEnum.SYSTEM_PATH_TOOLKITDIR.getMessage(), companyName, partName)));
         stringBuilder.append("  </pass>\n");
         stringBuilder.append("</flash_board>\n");
