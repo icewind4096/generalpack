@@ -71,4 +71,9 @@ public class IARFileFactory {
         MacFile macFile = new MacFile(coreName);
         return macFile.saveToFile(fileName);
     }
+
+    public static Boolean generateOutFile(String fileName, String coreName, Integer ramsize) {
+        OutFile outFile = new OutFile(coreName, ramsize);
+        return outFile.saveToFile(fileName);
+    }
 }

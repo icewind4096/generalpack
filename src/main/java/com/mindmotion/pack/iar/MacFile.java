@@ -14,10 +14,10 @@ public class MacFile {
 
 
     public Boolean saveToFile(String fileName) {
-        return FileUtils.copyFile(getMACFileName(coreName), fileName, true);
+        return FileUtils.copyFile(getFileName(coreName), fileName, true);
     }
 
-    private String getMACFileName(String coreName) {
+    private String getFileName(String coreName) {
         return String.format("%s\\%s.mac", IARPathUtil.getIARTemplatePath(), coreName);
     }
 }
