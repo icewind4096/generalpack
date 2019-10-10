@@ -15,6 +15,6 @@ public interface DesigncodeDAO extends JpaRepository<Designcode, Integer>{
 
     Page<Designcode> findAll(Pageable pageable);
 
-    @Query(nativeQuery=true, value = "select a.* from designcode a where a.code in (select designcode from partfamily b where b.familyname in (select familyname from part where partname = :partName))")
+    @Query(nativeQuery=true, value = "select a.* from designcode a where a.code in (select designcode from family b where b.familyname in (select familyname from part where partname = :partName))")
     Designcode findByPartNameParam(@Param("partName") String partName);
 }

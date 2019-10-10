@@ -81,4 +81,9 @@ public class FileUtils {
         File file = new File(rootDirectory);
         return file.getParent();
     }
+
+    public static Integer zipDirectory(String fileName, String directory) {
+        ZipCompressFile zipCompressFile = new ZipCompressFile(fileName);
+        return zipCompressFile.compress(directory);
+    }
 }

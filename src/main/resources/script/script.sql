@@ -151,29 +151,37 @@ CREATE TABLE IF NOT EXISTS `part` (
 -- 正在导出表  mindmotion.part 的数据：~1 rows (大约)
 /*!40000 ALTER TABLE `part` DISABLE KEYS */;
 INSERT INTO `part` (`id`, `familyname`, `partname`, `flashloadname`, `tag`, `displayname`, `freq`, `flashsize`, `ramsize`, `ips`, `crtime`) VALUES
-	(1, 'MM32F032', 'MM32F032K6U6', 'MM32F032x6', 'MM32F032K6U6', 'MindMotion MM32F032K6U6', 72000000, 32768, 8192, '{}', '2019-09-26 12:32:22');
+	(1, 'MM32F032x6', 'MM32F032K6U6', 'MM32F032x6',   'MM32F032K6U6', 'MindMotion MM32F032K6U6', 72000000, 32768, 8192,   '{}', '2019-09-26 12:32:22'),
+	(2, 'MM32F032x6', 'MM32F032K6T6', 'MM32F032x6',   'MM32F032K6T6', 'MindMotion MM32F032K6T6', 72000000, 32768, 8192,   '{}', '2019-09-26 12:32:22'),
+	(3, 'MM32F032x8', 'MM32F032K8U6', 'MM32F032x8',   'MM32F032K8U6', 'MindMotion MM32F032K8U6', 72000000, 65536, 16384,  '{}', '2019-09-26 12:32:22'),
+	(4, 'MM32F032x8', 'MM32F032K8T6', 'MM32F032x8',   'MM32F032K8T6', 'MindMotion MM32F032K6T6', 72000000, 65536, 16384,  '{}', '2019-09-26 12:32:22'),
+	(5, 'MM32SPIN06x','MM32SPIN06NT', 'MM32SPIN06NT', 'MM32F032K8T6', 'MindMotion MM32SPIN06NT', 72000000, 65536, 8192,   '{}', '2019-09-26 12:32:22'),
+	(6, 'MM32SPIN06x','MM32SPIN06PF', 'MM32SPIN06PF', 'MM32F032K8T6', 'MindMotion MM32SPIN06PF', 72000000, 65536, 8192,   '{}', '2019-09-26 12:32:22'),
+	(7, 'MM32SPIN06x','MM32SPIN06PS', 'MM32SPIN06PS', 'MM32F032K8T6', 'MindMotion MM32SPIN06PS', 72000000, 65536, 8192,   '{}', '2019-09-26 12:32:22');
 /*!40000 ALTER TABLE `part` ENABLE KEYS */;
 
--- 导出  表 mindmotion.partfamily 结构
-DROP TABLE IF EXISTS `partfamily`;
-CREATE TABLE IF NOT EXISTS `partfamily` (
+-- 导出  表 mindmotion.family 结构
+DROP TABLE IF EXISTS `family`;
+CREATE TABLE IF NOT EXISTS `family` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `parentId` varchar(16) NOT NULL DEFAULT '-1',
-  `designCode` varchar(32) NOT NULL,
-  `familyName` varchar(64) NOT NULL,
+  `parentid` varchar(16) NOT NULL DEFAULT '-1',
+  `designcode` varchar(32) NOT NULL,
+  `familyname` varchar(64) NOT NULL,
   `descript` varchar(256) NOT NULL,
-  `flashLoadID` int(11) NOT NULL DEFAULT '-1',
+  `flashloadid` int(11) NOT NULL DEFAULT '-1',
   `crtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- 正在导出表  mindmotion.partfamily 的数据：~2 rows (大约)
-/*!40000 ALTER TABLE `partfamily` DISABLE KEYS */;
-INSERT INTO `partfamily` (`id`, `parentId`, `designCode`, `familyName`, `descript`, `flashLoadID`, `crtime`) VALUES
-	(1, '-1', 'MZ310', 'MM32F0', 'MM32F0 Descript', -1, '2019-09-26 13:46:14'),
-	(2, '1', 'MZ310', 'MM32F032', 'MM32F032 Descript', -1, '2019-09-26 14:13:26');
-/*!40000 ALTER TABLE `partfamily` ENABLE KEYS */;
+/*!40000 ALTER TABLE `family` DISABLE KEYS */;
+INSERT INTO `family` (`id`, `parentid`, `designcode`, `familyname`, `descript`, `flashloadid`, `crtime`) VALUES
+	(1, '-1', 'MZ310',  'MM32F032',   'MM32F032 Descript',    -1, '2019-09-26 14:13:26'),
+	(2, '1',  'MZ310',  'MM32F032x6', 'MM32F032x4 Descript',  -1, '2019-09-26 14:13:26'),
+	(3, '1',  'MZ310',  'MM32F032x8', 'MM32F032x6 Descript',  -1, '2019-09-26 14:13:26'),
+	(4, '-1', 'MZ310',  'MM32SPIN06x','MM32SPIN06x Descript', -1, '2019-09-26 14:13:26');
+/*!40000 ALTER TABLE `family` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

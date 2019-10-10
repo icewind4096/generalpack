@@ -5,24 +5,26 @@ import com.mindmotion.converter.Designcode2DesigncodeDTOConvert;
 import com.mindmotion.converter.Part2PartDTOConvert;
 import com.mindmotion.dao.DDFMemoryDAO;
 import com.mindmotion.dao.DesigncodeDAO;
+import com.mindmotion.dao.FamilyDAO;
 import com.mindmotion.dao.PartDAO;
 import com.mindmotion.domain.DDFMemory;
 import com.mindmotion.domain.Designcode;
+import com.mindmotion.domain.Family;
 import com.mindmotion.domain.Part;
 import com.mindmotion.dto.DDFMemoryDTO;
 import com.mindmotion.dto.DesigncodeDTO;
 import com.mindmotion.dto.PartDTO;
-import com.mindmotion.enums.IARSysPathEnum;
 import com.mindmotion.enums.ResultEnum;
 import com.mindmotion.exception.GeneratePackException;
 import com.mindmotion.pack.iar.IARFileFactory;
 import com.mindmotion.pack.iar.common.IARPathUtil;
 import com.mindmotion.service.GeneralPackService;
-import com.mindmotion.utils.FileUtils;
-import com.mindmotion.utils.ZipCompressFile;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -30,6 +32,9 @@ import java.util.List;
  */
 @Service
 public class GeneralPackServiceImpl implements GeneralPackService {
+    @Autowired
+    FamilyDAO familyDAO;
+
     @Autowired
     PartDAO partDAO;
 
@@ -41,56 +46,111 @@ public class GeneralPackServiceImpl implements GeneralPackService {
 
     private final String COMPANYNAME = "MindMotion";
 
-    // TODO: 2019/9/26 后期数据有redis中获得，启动时，先把数据调理以后放入redis, 此处先模拟一些数据
-    private String getFamilyPath(String partName) {
-        if (partName.substring(0, 8).equalsIgnoreCase("MM32F032")){
-            if (partName.substring(9, 10).equalsIgnoreCase("6")){
-                return String.format("%s\\%sx6", partName.substring(0, 6), partName.substring(0, 8));
+    private HashMap<String, String> partFamilyMap = new HashMap<String, String>();
+
+    private String getFamilyFullPath(String partName) {
+        if (partFamilyMap.get(partName) == null){
+            refershPartNameMap();
+        }
+        return partFamilyMap.get(partName);
+    }
+
+    private Boolean refershPartNameMap() {
+        List<Part> partList = partDAO.findAllByOrderByPartnameDesc();
+
+        List<Family> familyList = familyDAO.findAllByOrderByIdDesc();
+
+        partFamilyMap.clear();
+
+        for (Part part: partList){
+            partFamilyMap.put(part.getPartname(), getFamilyFullByFamilyName(part.getFamilyname(), familyList));
+        }
+
+        return true;
+    }
+
+    private String getFamilyFullByFamilyName(String familyName, List<Family> familyList) {
+        Integer index0 = getFamilyByFamilyName(familyName, familyList);
+        if (index0 >= 0){
+            Family family = familyList.get(index0);
+            if (family.getParentid() > 0){
+                Integer index1 = getFamilyIndexByParentId(family.getParentid(), familyList);
+                return String.format("%s\\%s", familyList.get(index1).getFamilyname(), familyList.get(index0).getFamilyname());
             } else {
-                return String.format("%s\\%sX4", partName.substring(0, 6), partName.substring(0, 8));
+                return String.format("%s", familyList.get(index0).getFamilyname());
+            }
+        }
+        return "";
+    }
+
+    private Integer getFamilyIndexByParentId(Integer parentId, List<Family> familyList) {
+        for (int i = 0; i < familyList.size(); i++) {
+            if (familyList.get(i).getId().equals(parentId)){
+                return i;
             }
         };
-        return "";
+        return -1;
+    }
+
+    private Integer getFamilyByFamilyName(String familyName, List<Family> familyList) {
+        for (int i = 0; i < familyList.size(); i++) {
+            if (familyList.get(i).getFamilyname().equalsIgnoreCase(familyName)){
+                return i;
+            }
+        };
+        return -1;
     }
 
     @Override
     public Integer generateIARPackByPartName(String rootDirectory, String partName) {
-        Part part = partDAO.findByPartname(partName);
-        if (part == null){
-            throw new GeneratePackException(ResultEnum.SUBPARTFAMILY_NAME_NOT_EXITS);
-        }
-        PartDTO partDTO = Part2PartDTOConvert.convert(part);
+        PartDTO partDTO = getPartDTOData(partName);
 
-        Designcode designcode = designcodeDAO.findByPartNameParam(partDTO.getPartname());
-        if (part == null){
-            throw new GeneratePackException(ResultEnum.DESIGNCODE_NOT_EXIST);
-        }
-        DesigncodeDTO designcodeDTO = Designcode2DesigncodeDTOConvert.convert(designcode);
+        DesigncodeDTO designcodeDTO = getDesignCodeDTOData(partName);
 
-        List<DDFMemory> ddfMemoryList = ddfMemoryDAO.findAllByName(designcode.getDdfname());
-        if (ddfMemoryList == null){
-            throw new GeneratePackException(ResultEnum.DESIGNCODE_NOT_EXIST);
-        }
-        List<DDFMemoryDTO> ddfMemoryDTOList = DDFMemory2DDFMemoryDTOConvert.convert(ddfMemoryList);
+        List<DDFMemoryDTO> ddfMemoryDTOList = getDDFMemoryList(designcodeDTO.getDdfname());
 
         generate4Devices(rootDirectory, COMPANYNAME, partDTO, designcodeDTO);
 
-        generate4Debug(rootDirectory, COMPANYNAME, partDTO, designcode.getCorename(), ddfMemoryDTOList, designcodeDTO);
+        generate4Debug(rootDirectory, COMPANYNAME, partDTO, designcodeDTO.getCorename(), ddfMemoryDTOList, designcodeDTO);
 
         generate4Linker(rootDirectory, COMPANYNAME, designcodeDTO, partDTO);
 
         generate4FlashLoad(rootDirectory, COMPANYNAME, designcodeDTO, partDTO);
 
-        zipToPackFile("C:\\web\\mindmotion\\generalpack\\target\\test-classes\\iar.zip", rootDirectory);
-
-        FileUtils.delDirectorys(rootDirectory);
-
         return 0;
     }
 
-    private Integer zipToPackFile(String fileName, String directory) {
-        ZipCompressFile zipCompressFile = new ZipCompressFile(fileName);
-        return zipCompressFile.compress(directory);
+    private List<DDFMemoryDTO> getDDFMemoryList(String ddfname) {
+        List<DDFMemory> ddfMemoryList = ddfMemoryDAO.findAllByName(ddfname);
+        if (ddfMemoryList == null){
+            throw new GeneratePackException(ResultEnum.DESIGNCODE_NOT_EXIST);
+        }
+        return DDFMemory2DDFMemoryDTOConvert.convert(ddfMemoryList);
+    }
+
+    private DesigncodeDTO getDesignCodeDTOData(String partName) {
+        Designcode designcode = designcodeDAO.findByPartNameParam(partName);
+        if (designcode == null){
+            throw new GeneratePackException(ResultEnum.DESIGNCODE_NOT_EXIST);
+        }
+        return Designcode2DesigncodeDTOConvert.convert(designcode);
+    }
+
+    private PartDTO getPartDTOData(String partName) {
+        Part part = partDAO.findByPartname(partName);
+        if (part == null){
+            throw new GeneratePackException(ResultEnum.SUBPARTFAMILY_NAME_NOT_EXITS);
+        }
+        return Part2PartDTOConvert.convert(part);
+    }
+
+    @Override
+    public Integer generateIARPackAll(String rootDirectory) {
+        List<Part> partList = partDAO.findAll();
+        for (Part part: partList){
+            generateIARPackByPartName(rootDirectory, part.getPartname());
+        }
+        return 0;
     }
 
     private Boolean generate4FlashLoad(String rootDirectory, String companyName, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
@@ -130,14 +190,13 @@ public class GeneralPackServiceImpl implements GeneralPackService {
     }
 
     private Boolean generate4Devices(String rootDirectory, String company, PartDTO partDTO, DesigncodeDTO designcodeDTO) {
-        String directory = IARPathUtil.getDeviceFilePath(rootDirectory, company, getFamilyPath(partDTO.getPartname()));
+        String directory = IARPathUtil.getDeviceFilePath(rootDirectory, company, getFamilyFullPath(partDTO.getPartname()));
         if (IARFileFactory.makeDeviceDirectory(directory) == true) {
-            IARFileFactory.generateMenuFile(IARPathUtil.getMenuFileName(rootDirectory, company, getFamilyPath(partDTO.getPartname()), partDTO.getPartname()), partDTO);
-            IARFileFactory.generateI79File(IARPathUtil.getI79FileName(rootDirectory, company, getFamilyPath(partDTO.getPartname()), partDTO.getPartname()), company, partDTO.getPartname(), designcodeDTO);
+            IARFileFactory.generateMenuFile(IARPathUtil.getMenuFileName(rootDirectory, company, getFamilyFullPath(partDTO.getPartname()), partDTO.getPartname()), partDTO);
+            IARFileFactory.generateI79File(IARPathUtil.getI79FileName(rootDirectory, company, getFamilyFullPath(partDTO.getPartname()), partDTO.getPartname()), company, partDTO.getPartname(), designcodeDTO);
             return true;
         }
-        return false;
-    }
+        return false;    }
 
     @Override
     public Integer generateKeilPackByPartName(String subFamilyName) {

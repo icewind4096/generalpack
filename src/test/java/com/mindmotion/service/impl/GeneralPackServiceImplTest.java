@@ -32,7 +32,7 @@ public class GeneralPackServiceImplTest {
         String rootDirectory = resource.getURI().getPath() + "\\MM32_EWARM_Pack\\";
         Integer value = generalPackService.generateIARPackByPartName(rootDirectory,"MM32F032K6U6");
         FileUtils.zipDirectory(String.format("%s\\MM32_EWARM_Pack.zip", FileUtils.getParentDirectory(rootDirectory)), rootDirectory);
-        FileUtils.delDirectorys(rootDirectory);
+//        FileUtils.delDirectorys(rootDirectory);
         Assert.assertEquals(Integer.valueOf(0), value);
     }
 
@@ -42,7 +42,7 @@ public class GeneralPackServiceImplTest {
         String rootDirectory = resource.getURI().getPath() + "\\MM32_EWARM_Pack\\";
         Integer value = generalPackService.generateIARPackAll(rootDirectory);
         FileUtils.zipDirectory(String.format("%s\\MM32_EWARM_Pack.zip", FileUtils.getParentDirectory(rootDirectory)), rootDirectory);
-        FileUtils.delDirectorys(rootDirectory);
+//        FileUtils.delDirectorys(rootDirectory);
         Assert.assertEquals(Integer.valueOf(0), value);
     }
 
