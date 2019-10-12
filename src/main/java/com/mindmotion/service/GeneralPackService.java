@@ -11,5 +11,5 @@ public interface GeneralPackService {
     Integer generateIARPackAll(String rootDirectory);
 
     // 产生Keil pack文件
-    Integer generateKeilPackByPartName(String partName);
+    Integer generateKeilPackByFamily(String rootDirectory, String familyName);
 }

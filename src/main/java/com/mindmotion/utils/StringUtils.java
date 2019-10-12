@@ -1,9 +1,18 @@
 package com.mindmotion.utils;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 /**
  * Created by mecwa on 2019/9/26.
  */
 public class StringUtils {
+    public static Integer bool2Int(Boolean value){
+        return (value == true ? 1 : 0);
+    }
+
     public static String int2BoolString(Integer value){
         if (value == 0){
             return "false";
@@ -28,5 +37,15 @@ public class StringUtils {
 
     public static String int2HexString(Integer value, Integer width){
         return int2HexString(value, width, true, true);
+    }
+
+    public static String convertTimestamp2YYYYMMDD(Timestamp timestamp){
+        return convertTimestatmpWithPattern(timestamp, "yyyy-dd-mm");
+
+    }
+
+    private static String convertTimestatmpWithPattern(Timestamp timestamp, String pattern) {
+        DateFormat dateFormat = new SimpleDateFormat(pattern);
+        return dateFormat.format(timestamp);
     }
 }

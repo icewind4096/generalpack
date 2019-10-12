@@ -118,6 +118,7 @@ CREATE TABLE IF NOT EXISTS `flashload` (
 DROP TABLE IF EXISTS `packlog`;
 CREATE TABLE IF NOT EXISTS `packlog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` int(11) NOT NULL,
   `familyName` varchar(64) NOT NULL,
   `version` varchar(32) NOT NULL,
   `descript` varchar(2048) NOT NULL,
@@ -125,6 +126,10 @@ CREATE TABLE IF NOT EXISTS `packlog` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `mindmotion`.`packlog` (`id`, `type`, `familyName`, `version`, `descript`) VALUES
+(1, '1', 'MM32F032', '1.0.0', 'First Release version of MM32 Device Family Pack.'),
+(2, '1', 'MM32F032', '1.0.1', 'Second Release version of MM32 Device Family Pack.'),
+(3, '2', 'ALL',      '1.3.27','27th Release version of MM32 Device Family Pack.');
 
 -- 正在导出表  mindmotion.packlog 的数据：~0 rows (大约)
 /*!40000 ALTER TABLE `packlog` DISABLE KEYS */;

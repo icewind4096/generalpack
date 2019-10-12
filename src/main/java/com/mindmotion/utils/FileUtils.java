@@ -1,5 +1,8 @@
 package com.mindmotion.utils;
 
+import org.dom4j.Document;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -50,6 +53,18 @@ public class FileUtils {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static boolean saveToFile(String fileName, Document document){
+        OutputFormat outputFormat = OutputFormat.createPrettyPrint();
+        try {
+            XMLWriter xmlWriter = new XMLWriter(new FileWriter(new File(fileName)), outputFormat);
+            xmlWriter.write(document);
+            xmlWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public static Boolean copyFile(String sourceFileName, String targetFileName, Boolean replaceEn) {

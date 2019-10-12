@@ -1,29 +1,20 @@
 package com.mindmotion.service.impl;
 
-import com.mindmotion.converter.DDFMemory2DDFMemoryDTOConvert;
-import com.mindmotion.converter.Designcode2DesigncodeDTOConvert;
-import com.mindmotion.converter.Part2PartDTOConvert;
-import com.mindmotion.dao.DDFMemoryDAO;
-import com.mindmotion.dao.DesigncodeDAO;
-import com.mindmotion.dao.FamilyDAO;
-import com.mindmotion.dao.PartDAO;
-import com.mindmotion.domain.DDFMemory;
-import com.mindmotion.domain.Designcode;
-import com.mindmotion.domain.Family;
-import com.mindmotion.domain.Part;
-import com.mindmotion.dto.DDFMemoryDTO;
-import com.mindmotion.dto.DesigncodeDTO;
-import com.mindmotion.dto.PartDTO;
+import com.mindmotion.converter.*;
+import com.mindmotion.dao.*;
+import com.mindmotion.domain.*;
+import com.mindmotion.dto.*;
 import com.mindmotion.enums.ResultEnum;
 import com.mindmotion.exception.GeneratePackException;
 import com.mindmotion.pack.iar.IARFileFactory;
 import com.mindmotion.pack.iar.common.IARPathUtil;
+import com.mindmotion.pack.keil.KeilFileFactory;
+import com.mindmotion.pack.keil.common.KeilPathUtil;
 import com.mindmotion.service.GeneralPackService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -44,9 +35,13 @@ public class GeneralPackServiceImpl implements GeneralPackService {
     @Autowired
     DDFMemoryDAO ddfMemoryDAO;
 
+    @Autowired
+    PacklogDAO packLogDAO;
+
     private final String COMPANYNAME = "MindMotion";
 
     private HashMap<String, String> partFamilyMap = new HashMap<String, String>();
+    private FamilyDTO familyDTOData;
 
     private String getFamilyFullPath(String partName) {
         if (partFamilyMap.get(partName) == null){
@@ -105,7 +100,7 @@ public class GeneralPackServiceImpl implements GeneralPackService {
     public Integer generateIARPackByPartName(String rootDirectory, String partName) {
         PartDTO partDTO = getPartDTOData(partName);
 
-        DesigncodeDTO designcodeDTO = getDesignCodeDTOData(partName);
+        DesigncodeDTO designcodeDTO = getDesignCodeDTODataByPartName(partName);
 
         List<DDFMemoryDTO> ddfMemoryDTOList = getDDFMemoryList(designcodeDTO.getDdfname());
 
@@ -128,7 +123,15 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         return DDFMemory2DDFMemoryDTOConvert.convert(ddfMemoryList);
     }
 
-    private DesigncodeDTO getDesignCodeDTOData(String partName) {
+    private DesigncodeDTO getDesignCodeDTODataByCode(String code) {
+        Designcode designcode = designcodeDAO.findByCode(code);
+        if (designcode == null){
+            throw new GeneratePackException(ResultEnum.DESIGNCODE_NOT_EXIST);
+        }
+        return Designcode2DesigncodeDTOConvert.convert(designcode);
+    }
+
+    private DesigncodeDTO getDesignCodeDTODataByPartName(String partName) {
         Designcode designcode = designcodeDAO.findByPartNameParam(partName);
         if (designcode == null){
             throw new GeneratePackException(ResultEnum.DESIGNCODE_NOT_EXIST);
@@ -199,8 +202,57 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         return false;    }
 
     @Override
-    public Integer generateKeilPackByPartName(String subFamilyName) {
-        return null;
+    public Integer generateKeilPackByFamily(String rootDirectory, String familyName) {
+        FamilyDTO familyDTO = getFamilyDTOData(familyName);
+
+        List<FamilyDTO> familyDTOList = getSubFamilyDTODataByFamliyName(familyDTO.getParentid());
+
+        DesigncodeDTO designcodeDTO = getDesignCodeDTODataByCode(familyDTO.getDesigncode());
+
+        List<PacklogDTO> packlogDTOs = getPacklogDTODataByFamilyName(familyName);
+
+        List<PartDTO> partDTOList = getPartDTODataByFamilyNameList(getFamilyNameFromList(familyDTOList));
+
+        generate4PDSC(rootDirectory, COMPANYNAME, familyDTO, familyDTOList, designcodeDTO, packlogDTOs, partDTOList);
+
+        return 0;
+    }
+
+    private List<PartDTO> getPartDTODataByFamilyNameList(List<String> familyNameList) {
+        List<Part> partList = partDAO.findAllByFamilynameInOrderByPartname(familyNameList);
+        return Part2PartDTOConvert.convert(partList);
+    }
+
+    private List<String> getFamilyNameFromList(List<FamilyDTO> familyDTOList) {
+        List<String> familyNameList = new ArrayList<>();
+        for (FamilyDTO familyDTO: familyDTOList){
+            familyNameList.add(familyDTO.getFamilyname());
+        }
+        return familyNameList;
+    }
+
+    private List<FamilyDTO> getSubFamilyDTODataByFamliyName(Integer parentId) {
+        List<Family> familyList = familyDAO.findAllByParentidOrderById(parentId);
+        return Family2FamilyDTOConvert.convert(familyList);
+    }
+
+    private List<PacklogDTO> getPacklogDTODataByFamilyName(String familyName) {
+        List<Packlog> packlogs = packLogDAO.findAllByFamilynameOrderByVersionAsc(familyName);
+        return Packlog2PacklogDTOConvert.convert(packlogs);
+    }
+
+    private Boolean generate4PDSC(String rootDirectory, String companyName, FamilyDTO familyDTO, List<FamilyDTO> familyDTOList, DesigncodeDTO designcodeDTO, List<PacklogDTO> packlogDTOs, List<PartDTO> partDTOList) {
+        if (KeilFileFactory.makeRootDirectory(rootDirectory) == true) {
+            KeilFileFactory.generatePDSCFile(companyName, familyDTO, familyDTOList, designcodeDTO, KeilPathUtil.getPDSCFileName(rootDirectory, companyName, familyDTO.getFamilyname()), packlogDTOs, partDTOList);
+        }
+        return true;
+    }
+
+    public FamilyDTO getFamilyDTOData(String familyName) {
+        Family family = familyDAO.findByFamilyname(familyName);
+        if (family == null){
+            throw new GeneratePackException(ResultEnum.FAMILY_NAME_NOT_EXITS);
+        }
+        return Family2FamilyDTOConvert.convert(family);
     }
 }
-

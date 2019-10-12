@@ -2,6 +2,7 @@ package com.mindmotion.pack.iar;
 
 import com.mindmotion.dto.PartDTO;
 import com.mindmotion.pack.iar.common.IARPathUtil;
+import com.mindmotion.utils.FileUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -28,14 +29,6 @@ public class MenuFile {
         root.addElement("tag").addText(partDTO.getTag());
         root.addElement("display").addText(partDTO.getDisplayname());
         root.addElement("data").addText(String.format("%s\\%s.i79", IARPathUtil.getSysCurDir(), partDTO.getPartname()));
-        OutputFormat outputFormat = OutputFormat.createPrettyPrint();
-        try {
-            XMLWriter xmlWriter = new XMLWriter(new FileWriter(new File(fileName)), outputFormat);
-            xmlWriter.write(document);
-            xmlWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return true;
+        return FileUtils.saveToFile(fileName, document);
     }
 }

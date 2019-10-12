@@ -47,6 +47,14 @@ public class GeneralPackServiceImplTest {
     }
 
     @Test
-    public void generlKeilPack() throws Exception {
+    public void generlKeilPackByFamilyTest() throws Exception {
+        String familyName = "MM32F032";
+        String version = "1.0.0";
+        Resource resource = new ClassPathResource("");
+        String rootDirectory = resource.getURI().getPath() + "\\MM32_Keil_Pack\\" + familyName + "\\";
+        Integer value = generalPackService.generateKeilPackByFamily(rootDirectory, familyName);
+        FileUtils.zipDirectory(String.format("%s\\MindMotion.%s_DFP.%s.pack", FileUtils.getParentDirectory(rootDirectory), familyName, version), rootDirectory);
+//        FileUtils.delDirectorys(rootDirectory);
+        Assert.assertEquals(Integer.valueOf(0), value);
     }
 }

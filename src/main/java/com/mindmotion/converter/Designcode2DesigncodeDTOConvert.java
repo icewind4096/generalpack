@@ -14,18 +14,14 @@ import java.util.stream.Collectors;
 public class Designcode2DesigncodeDTOConvert {
     public static DesigncodeDTO convert(Designcode designcode){
         DesigncodeDTO designcodeDTO = new DesigncodeDTO();
-
         BeanUtils.copyProperties(designcode, designcodeDTO);
-
         return designcodeDTO;
     }
 
     public static List<DesigncodeDTO> convert(List<Designcode> designcodeList) {
         List<DesigncodeDTO> designcodeDTOList = new ArrayList<>();
         for (Designcode designcode:designcodeList){
-            DesigncodeDTO designcodeDTO = new DesigncodeDTO();
-            BeanUtils.copyProperties(designcode, designcodeDTO);
-            designcodeDTOList.add(designcodeDTO);
+            designcodeDTOList.add(convert(designcode));
         }
         return designcodeDTOList;
     }

@@ -12,4 +12,6 @@ public interface PartDAO extends JpaRepository<Part, Integer> {
     Part findByPartname(String partName);
 
     List<Part> findAllByOrderByPartnameDesc();
+
+    List<Part> findAllByFamilynameInOrderByPartname(List<String> familyName);
 }
