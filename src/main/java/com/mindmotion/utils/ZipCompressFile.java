@@ -3,12 +3,8 @@ package com.mindmotion.utils;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Zip;
 import org.apache.tools.ant.types.FileSet;
-import org.apache.tools.zip.ZipEntry;
-import org.apache.tools.zip.ZipOutputStream;
 
 import java.io.*;
-import java.util.zip.CRC32;
-import java.util.zip.CheckedOutputStream;
 
 /**
  * Created by mecwa on 2019/10/7.
