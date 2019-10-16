@@ -1,18 +1,18 @@
 package com.mindmotion.pack.keil;
 
-import com.mindmotion.domain.Packlog;
-import com.mindmotion.dto.DesigncodeDTO;
-import com.mindmotion.dto.FamilyDTO;
-import com.mindmotion.dto.PacklogDTO;
-import com.mindmotion.dto.PartDTO;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.mindmotion.dto.*;
+import com.mindmotion.pack.keil.common.KeilPathUtil;
 import com.mindmotion.utils.FileUtils;
 import com.mindmotion.utils.StringUtils;
 import com.mindmotion.utils.XMLFileUtil;
-import org.apache.el.lang.ELArithmetic;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.springframework.beans.BeanUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,7 +43,7 @@ public class PDSCFile {
     public Boolean saveToFile(String fileName) {
         Document document = DocumentHelper.createDocument();
 
-        Element element = document.addElement("package");
+        Element element = generatePackageRoot(document);
 
         generateBase(element, companyName, familyDTO, packlogDTOList);
 
@@ -52,13 +52,33 @@ public class PDSCFile {
         return FileUtils.saveToFile(fileName, document);
     }
 
+    private Element generatePackageRoot(Document document) {
+        Element element = document.addElement("package");
+        XMLFileUtil.appendAttribute(element, "schemaVersion", "1.2");
+        XMLFileUtil.appendAttribute(element, "xmlns:xs", "http://www.w3.org/2001/XMLSchema-instance");
+        XMLFileUtil.appendAttribute(element, "xs:noNamespaceSchemaLocation", "PACK.xsd");
+        return element;
+    }
+
     private void generateDevices(Element element, List<FamilyDTO> familyDTOList, FamilyDTO familyDTO, DesigncodeDTO designcodeDTO, String dvendor, String descript, List<PartDTO> partDTOList) {
         Element familyElement = generateFamily(generateDevicesNode(element), familyDTO, designcodeDTO, dvendor, descript);
         if (familyDTOList != null){
             for (FamilyDTO family: familyDTOList){
-                generateSubFamily(familyElement, designcodeDTO, family, partDTOList);
+                generateSubFamily(familyElement, designcodeDTO, family, getPartByFamilyName(family.getFamilyname(), partDTOList));
             }
         }
+    }
+
+    private List<PartDTO> getPartByFamilyName(String familyname, List<PartDTO> partDTOList) {
+        List<PartDTO> partDTOs = new ArrayList<>();
+        for (PartDTO partDTO: partDTOList){
+            if (familyname.equalsIgnoreCase(partDTO.getFamilyname()) == true){
+                PartDTO partDTO1 = new PartDTO();
+                BeanUtils.copyProperties(partDTO, partDTO1);
+                partDTOs.add(partDTO1);
+            }
+        }
+        return partDTOs;
     }
 
     private void generateSubFamily(Element familyElement, DesigncodeDTO designcodeDTO, FamilyDTO familyDTO, List<PartDTO> partDTOList) {
@@ -70,26 +90,77 @@ public class PDSCFile {
 
     private void generateDevice(Element subFamilyElement, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
         Element element = generateDeviceNode(subFamilyElement, partDTO.getPartname());
-        generateMemory(element, "IROM", designcodeDTO.getFlashbase(), partDTO.getFlashsize(), true, true);
-        XMLFileUtil.appendElement(element, "memory", "");
-
+        generateDeviceProcessor(element, partDTO.getFreq());
+        generateDeviceDebug(element, designcodeDTO, partDTO);
+        generateDeviceMemory4Flash(element, designcodeDTO, partDTO);
+        generateDeviceMemory4Ram(element, designcodeDTO, partDTO);
+        generateDeviceAlgorithm(element, designcodeDTO, partDTO);
+        generateDeviceFeature(element, partDTO.getIps());
     }
 
-    private void generateMemory(Element node, String name, Integer address, Integer size, boolean startUp, boolean defaultValue) {
+    private void generateDeviceDebug(Element root, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
+        Element element = XMLFileUtil.appendElement(root, "debug", "");
+        // TODO: 2019/10/15  svd归类于design还是family亦或part
+        XMLFileUtil.appendAttribute(element, "svd", KeilPathUtil.getSVDFileName("SVD", partDTO.getPartname()));
+    }
+
+    public static void generateDeviceFeature(Element root, String ips) {
+        List<IPsDTO> iPsDTOList = getIPsDTOListFromString(ips);
+        for (IPsDTO iPsDTO: iPsDTOList){
+            Element element = XMLFileUtil.appendElement(root, "feature", "");
+            XMLFileUtil.appendAttribute(element, "type", iPsDTO.getType());
+            XMLFileUtil.appendAttribute(element, "m", iPsDTO.getM());
+            XMLFileUtil.appendAttribute(element, "n", iPsDTO.getN());
+            XMLFileUtil.appendAttribute(element, "name", iPsDTO.getName());
+        }
+    }
+
+    private static List<IPsDTO> getIPsDTOListFromString(String ips) {
+        return new Gson().fromJson(ips, new TypeToken<List<IPsDTO>>(){}.getType());
+    }
+
+    private void generateDeviceAlgorithm(Element root, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
+        Element element = XMLFileUtil.appendElement(root, "algorithm", "");
+        XMLFileUtil.appendAttribute(element, "name", KeilPathUtil.getFLMFileName("FLASH", partDTO.getFlashsize()));
+        XMLFileUtil.appendAttribute(element, "start", StringUtils.int2HexString(designcodeDTO.getFlashbase(), 8));
+        XMLFileUtil.appendAttribute(element, "size", StringUtils.int2HexString(partDTO.getFlashsize(), 0));
+        XMLFileUtil.appendAttribute(element, "default", "1");
+    }
+
+    private void generateDeviceMemory4Ram(Element element, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
+        generateMemory(element, "IRAM1", designcodeDTO.getRambase(), partDTO.getRamsize(), null, true);
+    }
+
+    private void generateDeviceMemory4Flash(Element element, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
+        generateMemory(element, "IROM1", designcodeDTO.getFlashbase(), partDTO.getFlashsize(), true, true);
+    }
+
+    private void generateDeviceProcessor(Element root, Integer freq) {
+        Element element = XMLFileUtil.appendElement(root, "processor", "");
+        XMLFileUtil.appendAttribute(element, "Dclock", String.valueOf(freq));
+    }
+
+    private void generateMemory(Element node, String name, Integer address, Integer size, Boolean startUp, Boolean defaultValue) {
         Element element = XMLFileUtil.appendElement(node, "memory", "");
         XMLFileUtil.appendAttribute(element, "id", name);
-        XMLFileUtil.appendAttribute(element, "start", String.valueOf(address));
-        XMLFileUtil.appendAttribute(element, "size", String.valueOf(size));
-        XMLFileUtil.appendAttribute(element, "startup", String.valueOf(StringUtils.bool2Int(startUp)));
+        XMLFileUtil.appendAttribute(element, "start", StringUtils.int2HexString(address, 8));
+        XMLFileUtil.appendAttribute(element, "size", StringUtils.int2HexString(size, 0));
+        if (startUp != null){
+            XMLFileUtil.appendAttribute(element, "startup", String.valueOf(StringUtils.bool2Int(startUp)));
+        }
         XMLFileUtil.appendAttribute(element, "default", String.valueOf(StringUtils.bool2Int(defaultValue)));
     }
 
-    private Element generateDeviceNode(Element subFamilyElement, String partName) {
-        return XMLFileUtil.appendElement(subFamilyElement, partName, "");
+    private Element generateDeviceNode(Element node, String partName) {
+        Element element = XMLFileUtil.appendElement(node, "device", "");
+        XMLFileUtil.appendAttribute(element, "Dname", partName);
+        return element;
     }
 
-    private Element generateSubFamilyBase(Element familyElement, String familyname) {
-        return XMLFileUtil.appendElement(familyElement, "subFamily", "");
+    private Element generateSubFamilyBase(Element root, String familyname) {
+        Element element = XMLFileUtil.appendElement(root, "subFamily", "");
+        XMLFileUtil.appendAttribute(element, "DsubFamily", familyname);
+        return element;
     }
 
     private Element generateFamily(Element element, FamilyDTO familyDTO, DesigncodeDTO designcodeDTO, String DVENDOR, String descript) {
@@ -155,8 +226,9 @@ public class PDSCFile {
 
     private void generatePackage(Element element, String companyName, String familyName, String descript) {
         XMLFileUtil.appendElement(element, "vendor", companyName);
-        XMLFileUtil.appendElement(element, "name", familyName);
-        XMLFileUtil.appendElement(element, "url", "");
+        XMLFileUtil.appendElement(element, "name", String.format("%s_%s", familyName, "DFP"));
+        // TODO: 2019/10/15 暂时使用官网地址，否则PACKCHK的时候报告警告
+        XMLFileUtil.appendElement(element, "url", "www.mindmotion.com");
         XMLFileUtil.appendElement(element, "description", descript);
     }
 }

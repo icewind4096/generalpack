@@ -3,6 +3,7 @@ package com.mindmotion.pack.iar;
 import com.mindmotion.dto.DDFMemoryDTO;
 import com.mindmotion.dto.DesigncodeDTO;
 import com.mindmotion.dto.PartDTO;
+import com.mindmotion.pack.SVDFile;
 import com.mindmotion.utils.FileUtils;
 
 import java.util.List;

@@ -32,17 +32,17 @@ public class GeneralPackServiceImplTest {
         String rootDirectory = resource.getURI().getPath() + "\\MM32_EWARM_Pack\\";
         Integer value = generalPackService.generateIARPackByPartName(rootDirectory,"MM32F032K6U6");
         FileUtils.zipDirectory(String.format("%s\\MM32_EWARM_Pack.zip", FileUtils.getParentDirectory(rootDirectory)), rootDirectory);
-//        FileUtils.delDirectorys(rootDirectory);
+        FileUtils.delDirectorys(rootDirectory);
         Assert.assertEquals(Integer.valueOf(0), value);
     }
 
     @Test
     public void generateIARPackAllTest() throws Exception {
         Resource resource = new ClassPathResource("");
-        String rootDirectory = resource.getURI().getPath() + "\\MM32_EWARM_Pack\\";
+        String rootDirectory = resource.getFile() + "\\MM32_EWARM_Pack\\";
         Integer value = generalPackService.generateIARPackAll(rootDirectory);
         FileUtils.zipDirectory(String.format("%s\\MM32_EWARM_Pack.zip", FileUtils.getParentDirectory(rootDirectory)), rootDirectory);
-//        FileUtils.delDirectorys(rootDirectory);
+        FileUtils.delDirectorys(rootDirectory);
         Assert.assertEquals(Integer.valueOf(0), value);
     }
 
@@ -51,10 +51,10 @@ public class GeneralPackServiceImplTest {
         String familyName = "MM32F032";
         String version = "1.0.0";
         Resource resource = new ClassPathResource("");
-        String rootDirectory = resource.getURI().getPath() + "\\MM32_Keil_Pack\\" + familyName + "\\";
+        String rootDirectory = resource.getFile().getPath() + "\\MM32_Keil_Pack\\" + familyName;
         Integer value = generalPackService.generateKeilPackByFamily(rootDirectory, familyName);
-        FileUtils.zipDirectory(String.format("%s\\MindMotion.%s_DFP.%s.pack", FileUtils.getParentDirectory(rootDirectory), familyName, version), rootDirectory);
-//        FileUtils.delDirectorys(rootDirectory);
+        FileUtils.zipDirectory(String.format("%s\\MindMotion.%s_DFP.%s.pack", resource.getFile().getPath(), familyName, version), rootDirectory);
+        FileUtils.delDirectorys(resource.getFile().getPath() + "\\MM32_Keil_Pack\\");
         Assert.assertEquals(Integer.valueOf(0), value);
     }
 }

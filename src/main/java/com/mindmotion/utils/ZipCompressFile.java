@@ -1,69 +1,37 @@
 package com.mindmotion.utils;
 
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.taskdefs.Zip;
+import org.apache.tools.ant.types.FileSet;
+import org.apache.tools.zip.ZipEntry;
+import org.apache.tools.zip.ZipOutputStream;
+
 import java.io.*;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedOutputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 /**
  * Created by mecwa on 2019/10/7.
  */
-public class ZipCompressFile {
-    private final int BUFFERSIZE = 8192;
 
-    private File zipFile;
+public class ZipCompressFile{
+    public static Boolean compress(String destFileName, String sourceDirectoryName) {
+        File destFile = new File(destFileName);
+        File sourceFile = new File(sourceDirectoryName);
 
-    public ZipCompressFile(String fileName) {
-        zipFile = new File(fileName);
-    }
+        Project project = new Project();
 
-    public Integer compress(String directory) {
-        File file = new File(directory);
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(zipFile);
-            CheckedOutputStream cos = new CheckedOutputStream(fileOutputStream, new CRC32());
-            ZipOutputStream out = new ZipOutputStream(cos);
-            String basedir = "";
-            compress(file, out, basedir);
-            out.close();
-            return 1;
-        } catch (IOException e) {
-            e.printStackTrace();
-            if (zipFile.exists() == true){
-            }
-            return 0;
-        }
-    }
+        Zip zip = new Zip();
+        zip.setProject(project);
+        zip.setDestFile(destFile);
+        zip.setUpdate(true);
 
-    private void compress(File file, ZipOutputStream out, String basedir) {
-        if (file.isDirectory() == false) {
-            this.compressFile(file, out, basedir);
-        } else {
-            this.compressDirectory(file, out, basedir);
-        }
-    }
+        FileSet fileSet = new FileSet();
+        fileSet.setProject(project);
+        fileSet.setDir(sourceFile);
+        zip.addFileset(fileSet);
+        zip.execute();
 
-    private void compressDirectory(File directory, ZipOutputStream out, String basedir) {
-        File[] files = directory.listFiles();
-        for (int i = 0; i < files.length; i++) {
-            compress(files[i], out, basedir + directory.getName() + "/");
-        }
-    }
-
-    private void compressFile(File file, ZipOutputStream out, String basedir) {
-        try {
-            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-            ZipEntry entry = new ZipEntry(basedir + file.getName());
-            out.putNextEntry(entry);
-            int count;
-            byte data[] = new byte[BUFFERSIZE];
-            while ((count = bis.read(data, 0, BUFFERSIZE)) != -1) {
-                out.write(data, 0, count);
-            }
-            bis.close();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return true;
     }
 }

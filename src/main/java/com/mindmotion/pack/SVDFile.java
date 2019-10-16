@@ -1,7 +1,8 @@
-package com.mindmotion.pack.iar;
+package com.mindmotion.pack;
 
 import com.mindmotion.pack.iar.common.IARPathUtil;
 import com.mindmotion.utils.FileUtils;
+import com.mindmotion.utils.ResourceUtils;
 
 import java.io.IOException;
 
@@ -21,6 +22,6 @@ public class SVDFile {
 
     private String getFileNameByPartName(String partName) {
         // TODO: 2019/10/3 根据partName决定取什么svd， 规则再讨论
-        return String.format("%s\\%s", IARPathUtil.getIARTemplatePath(), "MM32F031C8T.svd");
+        return String.format("%s\\%s", ResourceUtils.getSVDTemplatePath(), "MM32F031C8T.svd");
     }
 }

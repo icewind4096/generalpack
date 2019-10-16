@@ -6,6 +6,7 @@ import com.mindmotion.domain.*;
 import com.mindmotion.dto.*;
 import com.mindmotion.enums.ResultEnum;
 import com.mindmotion.exception.GeneratePackException;
+import com.mindmotion.pack.SVDFile;
 import com.mindmotion.pack.iar.IARFileFactory;
 import com.mindmotion.pack.iar.common.IARPathUtil;
 import com.mindmotion.pack.keil.KeilFileFactory;
@@ -104,13 +105,13 @@ public class GeneralPackServiceImpl implements GeneralPackService {
 
         List<DDFMemoryDTO> ddfMemoryDTOList = getDDFMemoryList(designcodeDTO.getDdfname());
 
-        generate4Devices(rootDirectory, COMPANYNAME, partDTO, designcodeDTO);
+        generate4IARDevices(rootDirectory, COMPANYNAME, partDTO, designcodeDTO);
 
-        generate4Debug(rootDirectory, COMPANYNAME, partDTO, designcodeDTO.getCorename(), ddfMemoryDTOList, designcodeDTO);
+        generate4IARDebug(rootDirectory, COMPANYNAME, partDTO, designcodeDTO.getCorename(), ddfMemoryDTOList, designcodeDTO);
 
-        generate4Linker(rootDirectory, COMPANYNAME, designcodeDTO, partDTO);
+        generate4IARLinker(rootDirectory, COMPANYNAME, designcodeDTO, partDTO);
 
-        generate4FlashLoad(rootDirectory, COMPANYNAME, designcodeDTO, partDTO);
+        generate4IARFlashLoad(rootDirectory, COMPANYNAME, designcodeDTO, partDTO);
 
         return 0;
     }
@@ -156,7 +157,7 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         return 0;
     }
 
-    private Boolean generate4FlashLoad(String rootDirectory, String companyName, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
+    private Boolean generate4IARFlashLoad(String rootDirectory, String companyName, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
         String directory = IARPathUtil.getFlashLoadFilePath(rootDirectory, companyName);
         if (IARFileFactory.makeDebugDirectory(directory) == true) {
             IARFileFactory.generateBoardFile(IARPathUtil.getBoardFileName(rootDirectory, companyName, partDTO.getPartname()), companyName, designcodeDTO.getFlashbase(), partDTO.getFlashsize(), partDTO.getPartname());
@@ -169,7 +170,7 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         return false;
     }
 
-    private Boolean generate4Linker(String rootDirectory, String companyName, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
+    private Boolean generate4IARLinker(String rootDirectory, String companyName, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
         String directory = IARPathUtil.getLinkerFilePath(rootDirectory, companyName);
         if (IARFileFactory.makeDebugDirectory(directory) == true) {
             IARFileFactory.generateICFFile(IARPathUtil.getICFFileName(rootDirectory, companyName, partDTO.getPartname()), designcodeDTO, partDTO);
@@ -179,7 +180,7 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         return false;
     }
 
-    private Boolean generate4Debug(String rootDirectory, String companyname, PartDTO partDTO, String coreName, List<DDFMemoryDTO> ddfMemoryDTOList, DesigncodeDTO designcodeDTO) {
+    private Boolean generate4IARDebug(String rootDirectory, String companyname, PartDTO partDTO, String coreName, List<DDFMemoryDTO> ddfMemoryDTOList, DesigncodeDTO designcodeDTO) {
         String directory = IARPathUtil.getDebugFilePath(rootDirectory, companyname);
         if (IARFileFactory.makeDebugDirectory(directory) == true) {
             IARFileFactory.generateDDFFile(IARPathUtil.getDDFFileName(rootDirectory, companyname, partDTO.getPartname()), coreName, ddfMemoryDTOList, designcodeDTO, partDTO);
@@ -192,7 +193,7 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         return false;
     }
 
-    private Boolean generate4Devices(String rootDirectory, String company, PartDTO partDTO, DesigncodeDTO designcodeDTO) {
+    private Boolean generate4IARDevices(String rootDirectory, String company, PartDTO partDTO, DesigncodeDTO designcodeDTO) {
         String directory = IARPathUtil.getDeviceFilePath(rootDirectory, company, getFamilyFullPath(partDTO.getPartname()));
         if (IARFileFactory.makeDeviceDirectory(directory) == true) {
             IARFileFactory.generateMenuFile(IARPathUtil.getMenuFileName(rootDirectory, company, getFamilyFullPath(partDTO.getPartname()), partDTO.getPartname()), partDTO);
@@ -205,17 +206,44 @@ public class GeneralPackServiceImpl implements GeneralPackService {
     public Integer generateKeilPackByFamily(String rootDirectory, String familyName) {
         FamilyDTO familyDTO = getFamilyDTOData(familyName);
 
-        List<FamilyDTO> familyDTOList = getSubFamilyDTODataByFamliyName(familyDTO.getParentid());
+        List<FamilyDTO> familyDTOList = getSubFamilyDTODataByFamliyName(familyDTO.getId());
+        if (familyDTOList.size() == 0){
+            familyDTOList.add(familyDTO);
+        }
 
         DesigncodeDTO designcodeDTO = getDesignCodeDTODataByCode(familyDTO.getDesigncode());
 
         List<PacklogDTO> packlogDTOs = getPacklogDTODataByFamilyName(familyName);
 
-        List<PartDTO> partDTOList = getPartDTODataByFamilyNameList(getFamilyNameFromList(familyDTOList));
+        List<PartDTO> partDTOList = getPartDTODataByFamilyNameList(getFamilyNames(familyDTOList));
 
-        generate4PDSC(rootDirectory, COMPANYNAME, familyDTO, familyDTOList, designcodeDTO, packlogDTOs, partDTOList);
+        generate4KeilPDSC(rootDirectory, COMPANYNAME, familyDTO, familyDTOList, designcodeDTO, packlogDTOs, partDTOList);
+
+        generate4KeilSVD(rootDirectory, partDTOList);
+
+        generate4KeilFLM(rootDirectory, partDTOList);
 
         return 0;
+    }
+
+    private Boolean generate4KeilFLM(String rootDirectory, List<PartDTO> partDTOList) {
+        String directory = KeilPathUtil.getFLMFilePath(rootDirectory);
+        if (IARFileFactory.makeDeviceDirectory(directory) == true) {
+            for (PartDTO partDTO : partDTOList) {
+                KeilFileFactory.generateFLMFile(KeilPathUtil.getFLMFileName(directory, partDTO.getFlashsize()), partDTO.getFlashsize());
+            }
+        }
+        return true;
+    }
+
+    private Boolean generate4KeilSVD(String rootDirectory, List<PartDTO> partDTOList) {
+        String directory = KeilPathUtil.getSVDFilePath(rootDirectory);
+        if (IARFileFactory.makeDeviceDirectory(directory) == true) {
+            for (PartDTO partDTO : partDTOList) {
+                KeilFileFactory.generateSVDFile(KeilPathUtil.getSVDFileName(directory, partDTO.getPartname()), partDTO.getPartname());
+            }
+        }
+        return true;
     }
 
     private List<PartDTO> getPartDTODataByFamilyNameList(List<String> familyNameList) {
@@ -223,7 +251,7 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         return Part2PartDTOConvert.convert(partList);
     }
 
-    private List<String> getFamilyNameFromList(List<FamilyDTO> familyDTOList) {
+    private List<String> getFamilyNames(List<FamilyDTO> familyDTOList) {
         List<String> familyNameList = new ArrayList<>();
         for (FamilyDTO familyDTO: familyDTOList){
             familyNameList.add(familyDTO.getFamilyname());
@@ -241,7 +269,7 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         return Packlog2PacklogDTOConvert.convert(packlogs);
     }
 
-    private Boolean generate4PDSC(String rootDirectory, String companyName, FamilyDTO familyDTO, List<FamilyDTO> familyDTOList, DesigncodeDTO designcodeDTO, List<PacklogDTO> packlogDTOs, List<PartDTO> partDTOList) {
+    private Boolean generate4KeilPDSC(String rootDirectory, String companyName, FamilyDTO familyDTO, List<FamilyDTO> familyDTOList, DesigncodeDTO designcodeDTO, List<PacklogDTO> packlogDTOs, List<PartDTO> partDTOList) {
         if (KeilFileFactory.makeRootDirectory(rootDirectory) == true) {
             KeilFileFactory.generatePDSCFile(companyName, familyDTO, familyDTOList, designcodeDTO, KeilPathUtil.getPDSCFileName(rootDirectory, companyName, familyDTO.getFamilyname()), packlogDTOs, partDTOList);
         }

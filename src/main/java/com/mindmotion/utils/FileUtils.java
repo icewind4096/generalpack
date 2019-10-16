@@ -97,8 +97,10 @@ public class FileUtils {
         return file.getParent();
     }
 
-    public static Integer zipDirectory(String fileName, String directory) {
-        ZipCompressFile zipCompressFile = new ZipCompressFile(fileName);
-        return zipCompressFile.compress(directory);
+    public static Integer zipDirectory(String fileName, String directoryName) {
+        if (ZipCompressFile.compress(fileName, directoryName) == true){
+            return 1;
+        }
+        return 0;
     }
 }

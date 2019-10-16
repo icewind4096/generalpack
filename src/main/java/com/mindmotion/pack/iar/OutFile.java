@@ -2,6 +2,7 @@ package com.mindmotion.pack.iar;
 
 import com.mindmotion.pack.iar.common.IARPathUtil;
 import com.mindmotion.utils.FileUtils;
+import com.mindmotion.utils.ResourceUtils;
 
 /**
  * Created by windvalley on 2019/10/7.
@@ -20,6 +21,6 @@ public class OutFile {
     }
 
     private String getFileName(String coreName, Integer ramSize) {
-        return String.format("%s\\%s.out", IARPathUtil.getIARTemplatePath(), IARPathUtil.getOutFileNameByCoreAndRAM(coreName, ramSize));
+        return String.format("%s\\%s.out", IARPathUtil.getTemplatePath(), IARPathUtil.getOutFileNameByCoreAndRAM(coreName, ramSize));
     }
 }

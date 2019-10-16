@@ -2,6 +2,9 @@ package com.mindmotion.pack.iar.common;
 
 import com.mindmotion.enums.IARSysPathEnum;
 import com.mindmotion.utils.FileUtils;
+import com.mindmotion.utils.ResourceUtils;
+
+import java.util.ResourceBundle;
 
 /**
  * Created by MMNJ002 on 2019/9/29.
@@ -75,10 +78,6 @@ public class IARPathUtil {
         return getPartFileName(getDebugFilePath(directory, companyName), partname, ".svd");
     }
 
-    public static String getIARTemplatePath() {
-        return FileUtils.getResourcePath("packfiletemplate\\iar");
-    }
-
     public static String getFlashFileName(String directory, String companyName, String partName) {
         return getPartFileName(getFlashLoadFilePath(directory, companyName), partName, ".flash");
     }
@@ -94,5 +93,9 @@ public class IARPathUtil {
 
     public static String getMACFileName(String directory, String companyName, String partName) {
         return getPartFileName(getFlashLoadFilePath(directory, companyName), partName, ".mac");
+    }
+
+    public static String getTemplatePath() {
+        return String.format("%s\\iar", ResourceUtils.getTemplateRoot());
     }
 }

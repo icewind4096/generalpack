@@ -2,6 +2,7 @@ package com.mindmotion.pack.iar;
 
 import com.mindmotion.pack.iar.common.IARPathUtil;
 import com.mindmotion.utils.FileUtils;
+import com.mindmotion.utils.ResourceUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ClassPathResource;
 
@@ -22,7 +23,7 @@ public class ProbeScriptFile {
     }
 
     private String getProbeScriptFileName() throws IOException {
-        return String.format("%s\\%s.ProbeScript", IARPathUtil.getIARTemplatePath(), "MM32");
+        return String.format("%s\\%s.ProbeScript", IARPathUtil.getTemplatePath(), "MM32");
     }
 }
 

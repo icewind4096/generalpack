@@ -6,6 +6,7 @@ import com.mindmotion.dto.DesigncodeDTO;
 import com.mindmotion.dto.FamilyDTO;
 import com.mindmotion.dto.PacklogDTO;
 import com.mindmotion.dto.PartDTO;
+import com.mindmotion.pack.SVDFile;
 import com.mindmotion.utils.FileUtils;
 
 import java.util.List;
@@ -22,5 +23,15 @@ public class KeilFileFactory {
     public static Boolean generatePDSCFile(String companyName, FamilyDTO familyDTO, List<FamilyDTO> familyDTOList, DesigncodeDTO designcodeDTO, String fileName, List<PacklogDTO> packlogDTOList, List<PartDTO> partDTOList) {
         PDSCFile pdscFile = new PDSCFile(companyName, familyDTO, familyDTOList, designcodeDTO, packlogDTOList, partDTOList);
         return pdscFile.saveToFile(fileName);
+    }
+
+    public static Boolean generateSVDFile(String fileName, String partname) {
+        SVDFile svdFile = new SVDFile(partname);
+        return svdFile.saveToFile(fileName);
+    }
+
+    public static Boolean generateFLMFile(String fileName, Integer flashsize) {
+        FLMFile flmFile = new FLMFile(flashsize);
+        return flmFile.saveToFile(fileName);
     }
 }

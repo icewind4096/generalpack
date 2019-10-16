@@ -2,6 +2,7 @@ package com.mindmotion.pack.iar;
 
 import com.mindmotion.pack.iar.common.IARPathUtil;
 import com.mindmotion.utils.FileUtils;
+import com.mindmotion.utils.ResourceUtils;
 
 import java.io.IOException;
 
@@ -20,6 +21,6 @@ public class DMACFile {
     }
 
     private String getDMACFileName(String dmacName) {
-        return String.format("%s\\%s.dmac", IARPathUtil.getIARTemplatePath(), dmacName);
+        return String.format("%s\\%s.dmac", IARPathUtil.getTemplatePath(), dmacName);
     }
 }

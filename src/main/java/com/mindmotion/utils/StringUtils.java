@@ -22,7 +22,7 @@ public class StringUtils {
     }
 
     public static String int2HexString(Integer value, Integer width, Boolean preEn, Boolean lowCase){
-        String exp = "%0" + String.valueOf(width) + "x";
+        String exp = width == 0 ? "%x" : "%0" + String.valueOf(width) + "x";
         exp = String.format(exp, value);
         if (preEn == true) {
             exp = "0x" + exp;
