@@ -101,10 +101,9 @@ INSERT INTO `designcode` (`id`, `code`, `corename`, `corever`, `minfreq`, `fpu`,
 DROP TABLE IF EXISTS `flashload`;
 CREATE TABLE IF NOT EXISTS `flashload` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) NOT NULL,
+  `type` int(11) NOT NULL,
+  `name` varchar(64) NOT NULL,
   `descript` varchar(32) NOT NULL,
-  `iarfilename` varchar(256) NOT NULL,
-  `keilfilename` varchar(256) NOT NULL,
   `crtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
@@ -112,6 +111,13 @@ CREATE TABLE IF NOT EXISTS `flashload` (
 
 -- 正在导出表  mindmotion.flashload 的数据：~0 rows (大约)
 /*!40000 ALTER TABLE `flashload` DISABLE KEYS */;
+INSERT INTO `flashload` (`id`, `type`, `name`, `descript`, `crtime`) VALUES
+  (1, 'IAR', 'MM32_32FLM', 'IAR 32K', '2019-09-26 10:02:38'),
+  (2, 'IAR', 'MM32_64FLM', 'IAR 32K', '2019-09-26 10:02:38'),
+  (3, 'KEIL', 'Cortex-M08K.out', 'KEIL M0 0K', '2019-09-26 10:02:38'),
+  (4, 'KEIL', 'Cortex-M16K.out', 'KEIL M0 16K', '2019-09-26 10:02:38'),
+  (5, 'KEIL', 'Cortex-M32K.out', 'KEIL M0 32K', '2019-09-26 10:02:38'),
+  (6, 'KEIL', 'Cortex-M64K.out', 'KEIL M0 64K', '2019-09-26 10:02:38');
 /*!40000 ALTER TABLE `flashload` ENABLE KEYS */;
 
 -- 导出  表 mindmotion.packlog 结构
@@ -148,6 +154,9 @@ CREATE TABLE IF NOT EXISTS `part` (
   `flashsize` int(11) NOT NULL,
   `ramsize` int(11) NOT NULL,
   `ips` varchar(10240) NOT NULL,
+  `svd` varchar(64) NOT NULL,
+  `iarflashload` varchar(64) NOT NULL,
+  `keilflashload` varchar(64) NOT NULL,
   `crtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
@@ -155,15 +164,15 @@ CREATE TABLE IF NOT EXISTS `part` (
 
 -- 正在导出表  mindmotion.part 的数据：~1 rows (大约)
 /*!40000 ALTER TABLE `part` DISABLE KEYS */;
-INSERT INTO `part` (`id`, `familyname`, `partname`, `flashloadname`, `tag`, `displayname`, `freq`, `flashsize`, `ramsize`, `ips`, `crtime`) VALUES
-	(1, 'MM32F032x6', 'MM32F032K6U6', 'MM32F032x6',   'MM32F032K6U6', 'MindMotion MM32F032K6U6', 72000000, 32768, 8192,   '[{"type":"QFN","n":"32","m":"QFN Package"},{"type":"IOs","n":"27","m":"Input and Output Ports"},{"type":"ADC","n":"10","m":"12"},{"type":"SPI","n":"1"},{"type":"I2C","n":"1"},{"type":"UART","n":"2"},{"type":"RTC","n":"32","m":"Internal RTC"},{"type":"Timer","n":"5","m":"16"},{"type":"Timer","n":"1","m":"32"},{"type":"TimerOther","n":"1","m":"Window Watchdog Timer"},{"type":"TimerOther","n":"1","m":"Independent Watchdog Timer"}]', '2019-09-26 12:32:22'),
-	(2, 'MM32F032x6', 'MM32F032K6T6', 'MM32F032x6',   'MM32F032K6T6', 'MindMotion MM32F032K6T6', 72000000, 32768, 8192,   '[{"type":"QFN","n":"32","m":"QFN Package"},{"type":"IOs","n":"25","m":"Input and Output Ports"},{"type":"ADC","n":"10","m":"12"},{"type":"SPI","n":"1"},{"type":"I2C","n":"1"},{"type":"UART","n":"2"},{"type":"RTC","n":"32","m":"Internal RTC"},{"type":"Timer","n":"5","m":"16"},{"type":"Timer","n":"1","m":"32"},{"type":"TimerOther","n":"1","m":"Window Watchdog Timer"},{"type":"TimerOther","n":"1","m":"Independent Watchdog Timer"}]', '2019-09-26 12:32:22'),
-	(3, 'MM32F032x8', 'MM32F032K8U6', 'MM32F032x8',   'MM32F032K8U6', 'MindMotion MM32F032K8U6', 72000000, 65536, 16384,  '[{"type":"QFN","n":"32","m":"QFN Package"},{"type":"IOs","n":"27","m":"Input and Output Ports"},{"type":"ADC","n":"10","m":"12"},{"type":"SPI","n":"1"},{"type":"I2C","n":"1"},{"type":"UART","n":"2"},{"type":"RTC","n":"32","m":"Internal RTC"},{"type":"Timer","n":"5","m":"16"},{"type":"Timer","n":"1","m":"32"},{"type":"TimerOther","n":"1","m":"Window Watchdog Timer"},{"type":"TimerOther","n":"1","m":"Independent Watchdog Timer"}]', '2019-09-26 12:32:22'),
-	(4, 'MM32F032x8', 'MM32F032K8T6', 'MM32F032x8',   'MM32F032K8T6', 'MindMotion MM32F032K6T6', 72000000, 65536, 16384,  '[{"type":"QFN","n":"32","m":"QFN Package"},{"type":"IOs","n":"25","m":"Input and Output Ports"},{"type":"ADC","n":"10","m":"12"},{"type":"SPI","n":"1"},{"type":"I2C","n":"1"},{"type":"UART","n":"2"},{"type":"RTC","n":"32","m":"Internal RTC"},{"type":"Timer","n":"5","m":"16"},{"type":"Timer","n":"1","m":"32"},{"type":"TimerOther","n":"1","m":"Window Watchdog Timer"},{"type":"TimerOther","n":"1","m":"Independent Watchdog Timer"}]', '2019-09-26 12:32:22'),
-	(5, 'MM32F032x8', 'MM32F032C8T6', 'MM32F032x8',   'MM32F032C8T6', 'MindMotion MM32F032C8T6', 72000000, 65536, 16384,  '[{"type":"QFN","n":"48","m":"QFN Package"},{"type":"IOs","n":"39","m":"Input and Output Ports"},{"type":"ADC","n":"10","m":"12"},{"type":"SPI","n":"2"},{"type":"I2C","n":"1"},{"type":"UART","n":"2"},{"type":"RTC","n":"32","m":"Internal RTC"},{"type":"Timer","n":"5","m":"16"},{"type":"Timer","n":"1","m":"32"},{"type":"TimerOther","n":"1","m":"Window Watchdog Timer"},{"type":"TimerOther","n":"1","m":"Independent Watchdog Timer"}]', '2019-09-26 12:32:22'),
-	(6, 'MM32SPIN06x','MM32SPIN06NT', 'MM32SPIN06NT', 'MM32F032K8T6', 'MindMotion MM32SPIN06NT', 72000000, 65536, 8192,   '{}', '2019-09-26 12:32:22'),
-	(7, 'MM32SPIN06x','MM32SPIN06PF', 'MM32SPIN06PF', 'MM32F032K8T6', 'MindMotion MM32SPIN06PF', 72000000, 65536, 8192,   '{}', '2019-09-26 12:32:22'),
-	(8, 'MM32SPIN06x','MM32SPIN06PS', 'MM32SPIN06PS', 'MM32F032K8T6', 'MindMotion MM32SPIN06PS', 72000000, 65536, 8192,   '{}', '2019-09-26 12:32:22');
+INSERT INTO `part` (`id`, `familyname`, `partname`, `flashloadname`, `tag`, `displayname`, `freq`, `flashsize`, `ramsize`, `ips`, `keilflashload`, `iarflashload`, `svd`, `crtime`) VALUES
+	(1, 'MM32F032x6', 'MM32F032K6U6', 'MM32F032x6',   'MM32F032K6U6', 'MindMotion MM32F032K6U6', 72000000, 32768, 8192,   '[{"type":"QFN","n":"32","m":"QFN Package"},{"type":"IOs","n":"27","m":"Input and Output Ports"},{"type":"ADC","n":"10","m":"12"},{"type":"SPI","n":"1"},{"type":"I2C","n":"1"},{"type":"UART","n":"2"},{"type":"RTC","n":"32","m":"Internal RTC"},{"type":"Timer","n":"5","m":"16"},{"type":"Timer","n":"1","m":"32"},{"type":"TimerOther","n":"1","m":"Window Watchdog Timer"},{"type":"TimerOther","n":"1","m":"Independent Watchdog Timer"}]', 'MM32_32.FLM', 'Cortex-M032K.out', 'MM32F032K6U6.svd', '2019-09-26 12:32:22'),
+	(2, 'MM32F032x6', 'MM32F032K6T6', 'MM32F032x6',   'MM32F032K6T6', 'MindMotion MM32F032K6T6', 72000000, 32768, 8192,   '[{"type":"QFN","n":"32","m":"QFN Package"},{"type":"IOs","n":"25","m":"Input and Output Ports"},{"type":"ADC","n":"10","m":"12"},{"type":"SPI","n":"1"},{"type":"I2C","n":"1"},{"type":"UART","n":"2"},{"type":"RTC","n":"32","m":"Internal RTC"},{"type":"Timer","n":"5","m":"16"},{"type":"Timer","n":"1","m":"32"},{"type":"TimerOther","n":"1","m":"Window Watchdog Timer"},{"type":"TimerOther","n":"1","m":"Independent Watchdog Timer"}]', 'MM32_32.FLM', 'Cortex-M032K.out', 'MM32F032K6U6.svd', '2019-09-26 12:32:22'),
+	(3, 'MM32F032x8', 'MM32F032K8U6', 'MM32F032x8',   'MM32F032K8U6', 'MindMotion MM32F032K8U6', 72000000, 65536, 16384,  '[{"type":"QFN","n":"32","m":"QFN Package"},{"type":"IOs","n":"27","m":"Input and Output Ports"},{"type":"ADC","n":"10","m":"12"},{"type":"SPI","n":"1"},{"type":"I2C","n":"1"},{"type":"UART","n":"2"},{"type":"RTC","n":"32","m":"Internal RTC"},{"type":"Timer","n":"5","m":"16"},{"type":"Timer","n":"1","m":"32"},{"type":"TimerOther","n":"1","m":"Window Watchdog Timer"},{"type":"TimerOther","n":"1","m":"Independent Watchdog Timer"}]', 'MM32_64.FLM', 'Cortex-M064K.out', 'MM32F032K6U6.svd', '2019-09-26 12:32:22'),
+	(4, 'MM32F032x8', 'MM32F032K8T6', 'MM32F032x8',   'MM32F032K8T6', 'MindMotion MM32F032K6T6', 72000000, 65536, 16384,  '[{"type":"QFN","n":"32","m":"QFN Package"},{"type":"IOs","n":"25","m":"Input and Output Ports"},{"type":"ADC","n":"10","m":"12"},{"type":"SPI","n":"1"},{"type":"I2C","n":"1"},{"type":"UART","n":"2"},{"type":"RTC","n":"32","m":"Internal RTC"},{"type":"Timer","n":"5","m":"16"},{"type":"Timer","n":"1","m":"32"},{"type":"TimerOther","n":"1","m":"Window Watchdog Timer"},{"type":"TimerOther","n":"1","m":"Independent Watchdog Timer"}]', 'MM32_64.FLM', 'Cortex-M064K.out', 'MM32F032K8T6.svd', '2019-09-26 12:32:22'),
+	(5, 'MM32F032x8', 'MM32F032C8T6', 'MM32F032x8',   'MM32F032C8T6', 'MindMotion MM32F032C8T6', 72000000, 65536, 16384,  '[{"type":"QFN","n":"48","m":"QFN Package"},{"type":"IOs","n":"39","m":"Input and Output Ports"},{"type":"ADC","n":"10","m":"12"},{"type":"SPI","n":"2"},{"type":"I2C","n":"1"},{"type":"UART","n":"2"},{"type":"RTC","n":"32","m":"Internal RTC"},{"type":"Timer","n":"5","m":"16"},{"type":"Timer","n":"1","m":"32"},{"type":"TimerOther","n":"1","m":"Window Watchdog Timer"},{"type":"TimerOther","n":"1","m":"Independent Watchdog Timer"}]', 'MM32_64.FLM', 'Cortex-M064K.out', 'MM32F032K8T6.svd', '2019-09-26 12:32:22'),
+	(6, 'MM32SPIN06x','MM32SPIN06NT', 'MM32SPIN06NT', 'MM32F032K8T6', 'MindMotion MM32SPIN06NT', 72000000, 65536, 8192,   '{}', 'MM32_64.FLM', 'Cortex-M064K.out', 'MM32SPIN06NT.svd', '2019-09-26 12:32:22'),
+	(7, 'MM32SPIN06x','MM32SPIN06PF', 'MM32SPIN06PF', 'MM32F032K8T6', 'MindMotion MM32SPIN06PF', 72000000, 65536, 8192,   '{}', 'MM32_64.FLM', 'Cortex-M064K.out', 'MM32SPIN06NT.svd', '2019-09-26 12:32:22'),
+	(8, 'MM32SPIN06x','MM32SPIN06PS', 'MM32SPIN06PS', 'MM32F032K8T6', 'MindMotion MM32SPIN06PS', 72000000, 65536, 8192,   '{}', 'MM32_64.FLM', 'Cortex-M064K.out', 'MM32SPIN06NT.svd', '2019-09-26 12:32:22');
 /*!40000 ALTER TABLE `part` ENABLE KEYS */;
 
 
@@ -175,7 +184,6 @@ CREATE TABLE IF NOT EXISTS `family` (
   `designcode` varchar(32) NOT NULL,
   `familyname` varchar(64) NOT NULL,
   `descript` varchar(256) NOT NULL,
-  `flashloadid` int(11) NOT NULL DEFAULT '-1',
   `crtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
@@ -183,12 +191,30 @@ CREATE TABLE IF NOT EXISTS `family` (
 
 -- 正在导出表  mindmotion.partfamily 的数据：~2 rows (大约)
 /*!40000 ALTER TABLE `family` DISABLE KEYS */;
-INSERT INTO `family` (`id`, `parentid`, `designcode`, `familyname`, `descript`, `flashloadid`, `crtime`) VALUES
-	(1, '-1', 'MZ310',  'MM32F032',   'MM32F032 Descript',    -1, '2019-09-26 14:13:26'),
-	(2, '1',  'MZ310',  'MM32F032x6', 'MM32F032x4 Descript',  -1, '2019-09-26 14:13:26'),
-	(3, '1',  'MZ310',  'MM32F032x8', 'MM32F032x6 Descript',  -1, '2019-09-26 14:13:26'),
-	(4, '-1', 'MZ310',  'MM32SPIN06x','MM32SPIN06x Descript', -1, '2019-09-26 14:13:26');
+INSERT INTO `family` (`id`, `parentid`, `designcode`, `familyname`, `descript`, `crtime`) VALUES
+	(1, '-1', 'MZ310',  'MM32F032',   'MM32F032 Descript',    '2019-09-26 14:13:26'),
+	(2, '1',  'MZ310',  'MM32F032x6', 'MM32F032x4 Descript',  '2019-09-26 14:13:26'),
+	(3, '1',  'MZ310',  'MM32F032x8', 'MM32F032x6 Descript',  '2019-09-26 14:13:26'),
+	(4, '-1', 'MZ310',  'MM32SPIN06x','MM32SPIN06x Descript', '2019-09-26 14:13:26');
 /*!40000 ALTER TABLE `family` ENABLE KEYS */;
+
+-- 导出  表 mindmotion.svd 结构
+DROP TABLE IF EXISTS `svd`;
+CREATE TABLE IF NOT EXISTS `svd` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL,
+  `descript` varchar(32) NOT NULL,
+  `crtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- 正在导出表  mindmotion.svd 的数据：~0 rows (大约)
+/*!40000 ALTER TABLE `svd` DISABLE KEYS */;
+INSERT INTO `svd` (`id`, `name`, `descript`, `crtime`) VALUES
+  (1, 'MM32F032K6U6', 'MM32F032K6U6 SVD', '2019-09-26 10:02:38'),
+  (2, 'MM32F032K8T6', 'MM32F032K8T6 SVD', '2019-09-26 10:02:38'),
+  (3, 'MM32SPIN06NT', 'MM32SPIN06NT SVD', '2019-09-26 10:02:38');
+/*!40000 ALTER TABLE `svd` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
