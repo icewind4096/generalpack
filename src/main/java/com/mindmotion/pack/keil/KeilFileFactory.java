@@ -30,8 +30,8 @@ public class KeilFileFactory {
         return svdFile.saveToFile(fileName);
     }
 
-    public static Boolean generateFLMFile(String fileName, Integer flashsize) {
-        FLMFile flmFile = new FLMFile(flashsize);
-        return flmFile.saveToFile(fileName);
+    public static Boolean generateFLMFile(String targetFileName, String sourceFileName) {
+        FLMFile flmFile = new FLMFile(sourceFileName);
+        return flmFile.saveToFile(targetFileName);
     }
 }

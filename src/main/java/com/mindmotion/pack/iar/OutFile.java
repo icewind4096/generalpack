@@ -8,19 +8,17 @@ import com.mindmotion.utils.ResourceUtils;
  * Created by windvalley on 2019/10/7.
  */
 public class OutFile {
-    private final String coreName;
-    private final Integer ramSize;
+    private String sourceFileName;
 
-    public OutFile(String coreName, Integer ramSize) {
-        this.coreName = coreName;
-        this.ramSize = ramSize;
+    public OutFile(String sourceFileName) {
+        this.sourceFileName = sourceFileName;
     }
 
     public Boolean saveToFile(String fileName) {
-        return FileUtils.copyFile(getFileName(coreName, ramSize), fileName, true);
+        return FileUtils.copyFile(getFileName(sourceFileName), fileName, true);
     }
 
-    private String getFileName(String coreName, Integer ramSize) {
-        return String.format("%s\\%s.out", IARPathUtil.getTemplatePath(), IARPathUtil.getOutFileNameByCoreAndRAM(coreName, ramSize));
+    private String getFileName(String sourceFileName) {
+        return String.format("%s\\%s", IARPathUtil.getTemplatePath(), sourceFileName);
     }
 }

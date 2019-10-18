@@ -19,5 +19,8 @@ public class PartDTO {
     private Integer flashsize;
     private Integer ramsize;
     private String ips;
+    private String svd;
+    private String iarflashload;
+    private String keilflashload;
     private Timestamp crtime;
 }

@@ -101,7 +101,7 @@ public class PDSCFile {
     private void generateDeviceDebug(Element root, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
         Element element = XMLFileUtil.appendElement(root, "debug", "");
         // TODO: 2019/10/15  svd归类于design还是family亦或part
-        XMLFileUtil.appendAttribute(element, "svd", KeilPathUtil.getSVDFileName("SVD", partDTO.getPartname()));
+        XMLFileUtil.appendAttribute(element, "svd", KeilPathUtil.getSVDFileName("SVD", partDTO.getSvd()));
     }
 
     public static void generateDeviceFeature(Element root, String ips) {
@@ -121,7 +121,7 @@ public class PDSCFile {
 
     private void generateDeviceAlgorithm(Element root, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
         Element element = XMLFileUtil.appendElement(root, "algorithm", "");
-        XMLFileUtil.appendAttribute(element, "name", KeilPathUtil.getFLMFileName("FLASH", partDTO.getFlashsize()));
+        XMLFileUtil.appendAttribute(element, "name", KeilPathUtil.getFLMFileName("FLASH", partDTO.getKeilflashload()));
         XMLFileUtil.appendAttribute(element, "start", StringUtils.int2HexString(designcodeDTO.getFlashbase(), 8));
         XMLFileUtil.appendAttribute(element, "size", StringUtils.int2HexString(partDTO.getFlashsize(), 0));
         XMLFileUtil.appendAttribute(element, "default", "1");

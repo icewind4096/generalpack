@@ -30,7 +30,7 @@ public class FlashFile {
     private void putFileData(StringBuilder stringBuilder, String companyName, DesigncodeDTO designcodeDTO, PartDTO partDTO) {
         stringBuilder.append("<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n");
         stringBuilder.append("<flash_device>\n");
-        stringBuilder.append(String.format("  <exe>%s</exe>\n", IARPathUtil.getOutFileName(IARSysPathEnum.SYSTEM_PATH_TOOLKITDIR.getMessage(), companyName, IARPathUtil.getOutFileNameByCoreAndRAM(designcodeDTO.getCorename(), partDTO.getRamsize()))));
+        stringBuilder.append(String.format("  <exe>%s</exe>\n", IARPathUtil.getOutFileName(IARSysPathEnum.SYSTEM_PATH_TOOLKITDIR.getMessage(), companyName, partDTO.getIarflashload())));
         stringBuilder.append(String.format("  <page>%d</page>\n", designcodeDTO.getPage()));
         stringBuilder.append(String.format("  <block>%d %s</block>\n", partDTO.getFlashsize() / 1024, StringUtils.int2HexString(designcodeDTO.getBlock(), 4)));
         stringBuilder.append(String.format("  <flash_base>%s</flash_base>\n", StringUtils.int2HexString(designcodeDTO.getFlashbase(), 8)));

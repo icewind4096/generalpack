@@ -8,17 +8,17 @@ import com.mindmotion.utils.ResourceUtils;
  * Created by MMNJ002 on 2019/10/15.
  */
 public class FLMFile {
-    private Integer flashSize;
+    private String sourceFileName;
 
-    public FLMFile(Integer flashSize){
-        this.flashSize = flashSize;
+    public FLMFile(String fileName){
+        this.sourceFileName = fileName;
     }
 
     public Boolean saveToFile(String fileName) {
-        return FileUtils.copyFile(getFileNameByFlashSize(flashSize), fileName, true);
+        return FileUtils.copyFile(getFileName(sourceFileName), fileName, true);
     }
 
-    private String getFileNameByFlashSize(Integer flashSize) {
-        return KeilPathUtil.getFLMFileName(String.format("%s\\%s", ResourceUtils.getTemplateRoot(), "KEIL"), flashSize);
+    private String getFileName(String fileName) {
+        return KeilPathUtil.getFLMFileName(String.format("%s\\%s", ResourceUtils.getTemplateRoot(), "KEIL"), fileName);
     }
 }

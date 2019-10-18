@@ -8,8 +8,8 @@ public class KeilPathUtil {
         return String.format("%s\\%s.%s_DFP%s", rootDirectory, companyName, familyName, ".pdsc");
     }
 
-    public static String getSVDFileName(String rootDirectory, String partname) {
-        return String.format("%s/%s%s", rootDirectory, partname, ".SVD");
+    public static String getSVDFileName(String rootDirectory, String fileName) {
+        return String.format("%s/%s", rootDirectory, fileName);
     }
 
     public static String getSVDFilePath(String rootDirectory) {
@@ -20,7 +20,7 @@ public class KeilPathUtil {
         return String.format("%s/%s", rootDirectory, "FLASH");
     }
 
-    public static String getFLMFileName(String rootDirectory, Integer flashsize) {
-        return String.format("%s/MM32_%d%s", rootDirectory, flashsize / 1024, ".FLM");
+    public static String getFLMFileName(String rootDirectory, String fileName) {
+        return String.format("%s/%s", rootDirectory, fileName);
     }
 }

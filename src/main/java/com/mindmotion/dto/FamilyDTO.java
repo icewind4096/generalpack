@@ -14,6 +14,5 @@ public class FamilyDTO {
     private String designcode;
     private String familyname;
     private String descript;
-    private Integer flashloadid;
     private Timestamp crtime;
 }

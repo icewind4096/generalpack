@@ -73,8 +73,8 @@ public class IARFileFactory {
         return macFile.saveToFile(fileName);
     }
 
-    public static Boolean generateOutFile(String fileName, String coreName, Integer ramsize) {
-        OutFile outFile = new OutFile(coreName, ramsize);
-        return outFile.saveToFile(fileName);
+    public static Boolean generateOutFile(String targetFileName, String sourceFileName) {
+        OutFile outFile = new OutFile(sourceFileName);
+        return outFile.saveToFile(targetFileName);
     }
 }

@@ -163,7 +163,7 @@ public class GeneralPackServiceImpl implements GeneralPackService {
             IARFileFactory.generateBoardFile(IARPathUtil.getBoardFileName(rootDirectory, companyName, partDTO.getPartname()), companyName, designcodeDTO.getFlashbase(), partDTO.getFlashsize(), partDTO.getPartname());
             IARFileFactory.generateFlashFile(IARPathUtil.getFlashFileName(rootDirectory, companyName, partDTO.getPartname()), companyName, designcodeDTO, partDTO);
             IARFileFactory.generateMacFile(IARPathUtil.getMACFileName(rootDirectory, companyName, designcodeDTO.getCorename()), designcodeDTO.getCorename());
-            IARFileFactory.generateOutFile(IARPathUtil.getOutFileName(rootDirectory, companyName, IARPathUtil.getOutFileNameByCoreAndRAM(designcodeDTO.getCorename(), partDTO.getRamsize())), designcodeDTO.getCorename(), partDTO.getRamsize());
+            IARFileFactory.generateOutFile(IARPathUtil.getOutFileName(rootDirectory, companyName, partDTO.getIarflashload()), partDTO.getIarflashload());
             return true;
         }
 
@@ -230,7 +230,7 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         String directory = KeilPathUtil.getFLMFilePath(rootDirectory);
         if (IARFileFactory.makeDeviceDirectory(directory) == true) {
             for (PartDTO partDTO : partDTOList) {
-                KeilFileFactory.generateFLMFile(KeilPathUtil.getFLMFileName(directory, partDTO.getFlashsize()), partDTO.getFlashsize());
+                KeilFileFactory.generateFLMFile(KeilPathUtil.getFLMFileName(directory, partDTO.getKeilflashload()), partDTO.getKeilflashload());
             }
         }
         return true;

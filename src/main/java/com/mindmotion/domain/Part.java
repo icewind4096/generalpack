@@ -27,5 +27,8 @@ public class Part {
     private Integer flashsize;
     private Integer ramsize;
     private String ips;
+    private String svd;
+    private String iarflashload;
+    private String keilflashload;
     private String crtime;
 }

@@ -82,13 +82,8 @@ public class IARPathUtil {
         return getPartFileName(getFlashLoadFilePath(directory, companyName), partName, ".flash");
     }
 
-    public static String getOutFileName(String directory, String companyName, String partName) {
-        return getPartFileName(getFlashLoadFilePath(directory, companyName), partName, ".out");
-    }
-
-    // TODO: 2019/10/5 根据内核和ram尺寸，选择Out文件, Out文件放置于resource/packfiletemplate/iar目录下
-    public static String getOutFileNameByCoreAndRAM(String corename, Integer ramsize) {
-        return String.format("%s%dk", corename, ramsize / 1024);
+    public static String getOutFileName(String directory, String companyName, String fileName) {
+        return getPartFileName(getFlashLoadFilePath(directory, companyName), fileName, "");
     }
 
     public static String getMACFileName(String directory, String companyName, String partName) {
