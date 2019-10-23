@@ -42,7 +42,7 @@ public class GeneralPackServiceImplTest {
         String rootDirectory = resource.getFile() + "\\MM32_EWARM_Pack\\";
         Integer value = generalPackService.generateIARPackAll(rootDirectory);
         FileUtils.zipDirectory(String.format("%s\\MM32_EWARM_Pack.zip", FileUtils.getParentDirectory(rootDirectory)), rootDirectory);
-//        FileUtils.delDirectorys(rootDirectory);
+        FileUtils.delDirectorys(rootDirectory);
         Assert.assertEquals(Integer.valueOf(0), value);
     }
 
@@ -54,7 +54,7 @@ public class GeneralPackServiceImplTest {
         String rootDirectory = resource.getFile().getPath() + "\\MM32_Keil_Pack\\" + familyName;
         Integer value = generalPackService.generateKeilPackByFamily(rootDirectory, familyName);
         FileUtils.zipDirectory(String.format("%s\\MindMotion.%s_DFP.%s.pack", resource.getFile().getPath(), familyName, version), rootDirectory);
-//        FileUtils.delDirectorys(resource.getFile().getPath() + "\\MM32_Keil_Pack\\");
+        FileUtils.delDirectorys(resource.getFile().getPath() + "\\MM32_Keil_Pack\\");
         Assert.assertEquals(Integer.valueOf(0), value);
     }
 }

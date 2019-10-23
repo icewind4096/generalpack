@@ -54,7 +54,7 @@ public class GeneralPackServiceImpl implements GeneralPackService {
     private Boolean refershPartNameMap() {
         List<Part> partList = partDAO.findAllByOrderByPartnameDesc();
 
-        List<Family> familyList = familyDAO.findAllByOrderByIdDesc();
+        List<Family> familyList = familyDAO.findAllByOrderByIdAsc();
 
         partFamilyMap.clear();
 

@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface FamilyDAO extends JpaRepository<Family, Integer> {
     Family findByFamilyname(String familyName);
-    List<Family> findAllByOrderByIdDesc();
+    List<Family> findAllByOrderByIdAsc();
     List<Family> findAllByParentidOrderById(Integer parentid);
 }
