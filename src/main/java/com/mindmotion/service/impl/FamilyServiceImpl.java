@@ -38,7 +38,6 @@ public class FamilyServiceImpl implements FamilyService {
                 }
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("name", familyDTO.getFamilyname());
-                jsonObject.addProperty("core", familyDTO.getDesigncode());
                 JsonArray childrenArray = listToJSONTree(familyList, familyDTO);
                 if (childrenArray != null){
                     jsonObject.add("children", childrenArray);
