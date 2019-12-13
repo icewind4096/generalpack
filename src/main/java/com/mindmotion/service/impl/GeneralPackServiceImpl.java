@@ -240,7 +240,7 @@ public class GeneralPackServiceImpl implements GeneralPackService {
         String directory = KeilPathUtil.getSVDFilePath(rootDirectory);
         if (IARFileFactory.makeDeviceDirectory(directory) == true) {
             for (PartDTO partDTO : partDTOList) {
-                KeilFileFactory.generateSVDFile(KeilPathUtil.getSVDFileName(directory, partDTO.getPartname()), partDTO.getPartname());
+                KeilFileFactory.generateSVDFile(KeilPathUtil.getSVDFileName(directory, partDTO.getSvd()), partDTO.getPartname());
             }
         }
         return true;
@@ -277,7 +277,7 @@ public class GeneralPackServiceImpl implements GeneralPackService {
     }
 
     public FamilyDTO getFamilyDTOData(String familyName) {
-        Family family = familyDAO.findByFamilyname(familyName);
+        Family family = familyDAO.findByFamilynameParam(familyName);
         if (family == null){
             throw new GeneratePackException(ResultEnum.FAMILY_NAME_NOT_EXITS);
         }
