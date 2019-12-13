@@ -65,7 +65,7 @@ public class DDFFile {
         stringBuilder.append("\n");
 
         stringBuilder.append("[SfrInclude]\n");
-        stringBuilder.append(String.format("%s=\n", "File", partDTO.getSvd()));
+        stringBuilder.append(String.format("%s=%s\n", "File", partDTO.getSvd()));
     }
 
     private void putCoreData(StringBuilder stringBuilder, String coreName) {
