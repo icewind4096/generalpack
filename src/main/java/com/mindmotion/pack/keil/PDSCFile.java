@@ -214,6 +214,8 @@ public class PDSCFile {
     }
 
     private void generateRelease(Element node, List<PacklogDTO> packlogList) {
+        // TODO: 2019/12/13 release的log日志必须填写一个，否则 Keil在安装pack包时，
+        // 由于无法找到版本，导致安装目录位NULL, 从而死机
         if (packlogList != null){
             Element elementReleases = XMLFileUtil.appendElement(node, "releases", "");
             for (PacklogDTO packlog: packlogList){
