@@ -14,21 +14,13 @@ public class StringUtils {
     }
 
     public static String int2BoolString(Integer value){
-        if (value == 0){
-            return "false";
-        } else {
-            return "true";
-        }
+        return (value == 0 ? "false" : "true");
     }
 
     public static String int2HexString(Integer value, Integer width, Boolean preEn, Boolean lowCase){
         String exp = width == 0 ? "%x" : "%0" + String.valueOf(width) + "x";
         exp = String.format(exp, value);
-        if (preEn == true) {
-            exp = "0x" + exp;
-        } else {
-            exp = exp + "h";
-        }
+        exp = preEn == true ? "0x" + exp : exp + "h";
         if (lowCase == false){
             exp = exp.toUpperCase();
         }
