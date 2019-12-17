@@ -30,7 +30,7 @@ public class GeneralPackServiceImplTest {
     public void generateIARPackByPartNameTest() throws Exception {
         Resource resource = new ClassPathResource("");
         String rootDirectory = resource.getURI().getPath() + "\\MM32_EWARM_Pack\\";
-        Integer value = generalPackService.generateIARPackByPartName(rootDirectory,"MM32F003");
+        Integer value = generalPackService.generateIARPackByPartName(rootDirectory,"MM32L051");
         FileUtils.zipDirectory(String.format("%s\\MM32_EWARM_Pack.zip", FileUtils.getParentDirectory(rootDirectory)), rootDirectory);
         FileUtils.delDirectorys(rootDirectory);
         Assert.assertEquals(Integer.valueOf(0), value);
@@ -48,7 +48,7 @@ public class GeneralPackServiceImplTest {
 
     @Test
     public void generlKeilPackByFamilyTest() throws Exception {
-        String familyName = "MM32F032";
+        String familyName = "MM32L3";
         String version = "1.0.0";
         Resource resource = new ClassPathResource("");
         String rootDirectory = resource.getFile().getPath() + "\\MM32_Keil_Pack\\" + familyName;

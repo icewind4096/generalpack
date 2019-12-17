@@ -1,0 +1,168 @@
+_ExecDeviceExecutionStarted()
+{
+  if (__driverType("ijet"))
+  {
+    // Allow debugging in power saving modes.
+    
+    __var dbgmcu_cr;
+
+    dbgmcu_cr = __readMemory32(0x40015804, "Memory");
+
+    if ((dbgmcu_cr & 0x6) != 0x6) {
+      
+      dbgmcu_cr |= 6; // set DBG_STOP and DBG_STANDBY.
+      
+      __writeMemory32(dbgmcu_cr, 0x40015804, "Memory");
+      __message "DBGMCU_CR set to inhibit sleep-mode while debugging";
+    }
+  }
+}
+
+unlockFlash()
+{
+  // unlock Flash program and erase controller
+
+  if(0x80 & __readMemory32(0x40022010,"Memory"))
+  {
+    __message "Unlocking FLASH";
+    
+    __writeMemory32(0x45670123, 0x40022004, "Memory"); // FLASH->FKEYR = FLASH_KEY1;
+    __writeMemory32(0xCDEF89AB, 0x40022004, "Memory"); // FLASH->FKEYR = FLASH_KEY2;
+    __writeMemory32(0xFFFFFFF8 & __readMemory32(0x40022000,"Memory"), 0x40022000, "Memory"); // Flash 0 wait state
+
+  }
+  else
+  {
+     __message "FLASH is already unlocked";
+  }
+
+}
+
+
+lockFlash()
+{
+  // lock Flash program and erase controller
+  
+  if(!(0x80 & __readMemory32(0x40022010,"Memory")))
+  {
+    __message "Locking FLASH";
+    
+    __var temp_cr;
+    temp_cr = __readMemory32(0x40022010,"Memory");
+    
+    __writeMemory32(temp_cr | 0x80, 0x40022010, "Memory"); // Set lock bit;
+  
+  }
+  else
+  {
+    __message "FLASH is already locked";
+  }
+
+}
+
+setOptionBytesWriteEnable()
+{
+  //Write enable for option bytes area
+
+  if(!(0x200 & __readMemory32(0x40022010,"Memory")))
+  {
+  
+    unlockFlash();
+  
+    __writeMemory32(0x45670123, 0x40022008, "Memory"); // FLASH->OPTKEYR = FLASH_OPTKEY1;
+    __writeMemory32(0xCDEF89AB, 0x40022008, "Memory"); // FLASH->OPTKEYR = FLASH_OPTKEY2; 
+    
+    __message "Option bytes write enabled";
+  
+  }
+
+}
+
+
+readProtectionEnable()
+{
+// NOTICE
+// This function will set read protection level 1, which can be disabled.
+// Protection level 2 is irreversible and makes the JTAG interface permanently inoperable.
+// See "Reference manual MM32F05xxx/06xxx advanced ARM-based 32-bit MCUs" for details.
+
+
+  if ((0x6 & __readMemory32(0x4002201C,"Memory")) == 0)
+  {
+  
+    setOptionBytesWriteEnable();
+    
+    __message "Setting FLASH readout protection level 1";
+    
+    __writeMemory32(0x00000220, 0x40022010, "Memory"); // Option byte erase
+    __writeMemory32(0x00000260, 0x40022010, "Memory"); // Start operation
+    
+    while(0x1 & __readMemory32(0x4002200C,"Memory"));  // Wait while FLASH busy
+    
+    __writeMemory32(0x00000210, 0x40022010, "Memory"); // Option byte programming
+    __writeMemory16(0x00FF, 0x1FFFF800, "Memory");     // Enable readout protection
+    
+    while(0x1 & __readMemory32(0x4002200C,"Memory"));  // Wait while FLASH busy
+    
+    __writeMemory32(0x00002000, 0x40022010, "Memory"); // Force reload option bytes
+    
+    __hwReset(0); // Reset to make changes take effect
+  
+  }
+  else
+  {
+    __message "Readout protection already set";
+  }
+  
+}
+
+
+readProtectionDisable()
+{
+
+  if ((0x6 & __readMemory32(0x4002201C,"Memory")) != 0)
+  {
+  
+    __message "Reset FLASH readout protection";
+    
+    __writeMemory32(0x00000220, 0x40022010, "Memory"); // Option byte erase
+    __writeMemory32(0x00000260, 0x40022010, "Memory"); // Start operation
+    
+    while(0x1 & __readMemory32(0x4002200C,"Memory"));  // Wait while FLASH busy
+    
+    __writeMemory32(0x00000210, 0x40022010, "Memory"); // Option byte programming
+    __writeMemory16(0x55AA, 0x1FFFF800, "Memory");
+    
+    while(0x1 & __readMemory32(0x4002200C,"Memory"))
+    {
+    
+      __delay(100);
+    
+    }  // Wait while FLASH busy
+    
+    __writeMemory32(0x00002000, 0x40022010, "Memory");
+    
+    __hwReset(0); // Reset to make changes take effect
+  
+  }
+  else
+  {
+    __message "Readout protection already reset";
+  }
+  
+}
+
+
+getPersistentMacros()   // <-- Reserved name, debugger calls it to populate QuickLaunch view.
+{
+  __message "getPersistentMacros";
+  __var macs;
+  
+  macs = "unlockFlash()";
+  macs += ";lockFlash()";
+  macs += ";readProtectionDisable()";
+  macs += ";readProtectionEnable()";
+  macs += ";setOptionBytesWriteEnable()";
+  
+  return macs;
+}
