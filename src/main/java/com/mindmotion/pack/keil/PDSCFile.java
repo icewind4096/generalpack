@@ -201,16 +201,24 @@ public class PDSCFile {
     private void generateBase(Element element, String companyName, FamilyDTO familyDTO, List<PacklogDTO> packlogDTOList) {
         generatePackage(element, companyName, familyDTO.getFamilyname(), familyDTO.getDescript());
         generateRelease(element, packlogDTOList);
-        generateKey(element, familyDTO.getFamilyname());
+        generateKey(element, getKeys(familyDTO.getFamilyname()));
     }
 
-    private void generateKey(Element element, String familyName) {
+    private List<String> getKeys(String familyName) {
+        List<String> keys = new ArrayList<>();
+        keys.add("MindMotion");
+        keys.add("Device Support");
+        keys.add("Device Family Package MindMotion");
+        keys.add(familyName);
+        keys.add("MM32");
+        return keys;
+    }
+
+    private void generateKey(Element element, List<String> keys) {
         Element elementKeys = XMLFileUtil.appendElement(element, "keywords", "");
-        XMLFileUtil.appendElement(elementKeys, "keywords", "MindMotion");
-        XMLFileUtil.appendElement(elementKeys, "keywords", "Device Support");
-        XMLFileUtil.appendElement(elementKeys, "keywords", "Device Family Package MindMotion");
-        XMLFileUtil.appendElement(elementKeys, "keywords", familyName);
-        XMLFileUtil.appendElement(elementKeys, "keywords", "MM32");
+        for (String key: keys) {
+            XMLFileUtil.appendElement(elementKeys, "keywords", key);
+        }
     }
 
     private void generateRelease(Element node, List<PacklogDTO> packlogList) {
